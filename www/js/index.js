@@ -47,3 +47,10 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+			$(document).ready(function(){
+				$('a').click(function(e){
+					e.preventDefault();
+					$('body').prepend("<div class='loading'></div>");
+					window.location = $(this).attr('href');;
+				});
+			});

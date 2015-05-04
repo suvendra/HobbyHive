@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+		<script src="js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <title>New to myhobbyhive</title>
+    </head>
+    <body>
+		<header class="header_sec">
+			<a href="index.html"><div class="nav"></div></a>
+			<div class="logo"><img src="img/logo.png"></div>
+		</header>
+        <div class="app">
+			<div id="text" class="white_text">
+				<ul class="personal_info">
+					<li><div class="info">Name : </div><div class="data" id="name"></div></li>
+					<li><div class="info">Address : </div><div class="data" id="address"></div></li>
+					<li><div class="info">Country : </div><div class="data" id="country"></div></li>
+					<li><div class="info">Club : </div><div class="data" id="club"></div></li>
+					<li><div class="info">Email : </div><div class="data" id="email"></div></li>
+					<li><div class="info">About Me : </div><div class="data" id="aboutme"></div></li>
+					<li><div class="info">Mobile : </div><div class="data" id="mobile"></div></li>
+				</ul>
+			</div>
+        </div>
+        <!--script type="text/javascript" src="cordova.js"></script-->
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+		<script>
+			$(document).ready(function(){
+			var email = localStorage.getItem("hobby_email");
+			var pass = localStorage.getItem("hobby_pass");
+			var sendData = { "email":email, "pass":pass };
+			$('body').prepend("<div class='loading'></div>");
+			$.ajax({
+				type: "POST",
+				url: "http://localhost/hobbyhiveapp/userpage.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+						$("#name").html(data['fname']+" "+ data['lname']);
+						$("#address").html(data['addressl1']+" "+ data['addressl2']);
+						$("#country").html(data['country']);
+						$("#club").html(data['club']);
+						$("#email").html(data['email']);
+						$("#aboutme").html(data['aboutme']);
+						$("#mobile").html(data['mobile']);
+						$('.loading').remove();
+					}
+					
+				},
+				error: function(data, textStatus, errorThrown) { 
+						$('.loading').remove();
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                } 
+				});
+			});
+		</script>
+	</body>
+</html>

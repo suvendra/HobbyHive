@@ -54,6 +54,8 @@
 					if (data['success']=='0'){
 					var response = data['message'];
 					$("#login").prop('disabled', false);
+					localStorage.setItem("hobby_email", email);
+					localStorage.setItem("hobby_pass", pass);
 					$('.loading').remove();
 					$("#error").html(response);
 					} else { 

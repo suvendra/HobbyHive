@@ -193,3 +193,18 @@ input[type="email"], input[type="password"] {
   position: absolute;
   top: 0px;
 }
+.personal_info {
+  list-style: none;
+  padding: 0px;
+  text-align: left;
+}
+.info {
+  width: 80px;
+  display: inline-block;
+}
+.data {
+  display: inline-block;
+  width: 180px;
+  vertical-align: top;
+  font-family: "Roboto-Bold";
+}

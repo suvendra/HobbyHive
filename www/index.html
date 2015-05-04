@@ -42,18 +42,9 @@
 			</div>
 			<a href="register.html"><div class="next"></div></a>
         </div>
-        <!--script type="text/javascript" src="cordova.js"></script-->
+        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
-		<script>
-			$(document).ready(function(){
-				$('a').click(function(e){
-					e.preventDefault();
-					$('body').prepend("<div class='loading'></div>");
-					window.location = $(this).attr('href');;
-				});
-			});
-		</script>
     </body>
 </html>
