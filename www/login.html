@@ -10,6 +10,13 @@
 		<script src="js/jquery-1.11.2.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <title>New to myhobbyhive</title>
+		<script>
+		$(function () {
+			if (!(localStorage.getItem("hobby_email") === null)&& !(localStorage.getItem("hobby_pass") === null)){
+			window.location = 'userpage.html';
+		}
+		});
+		</script>
     </head>
     <body>
 		<header class="header_sec">
@@ -44,22 +51,22 @@
 			var pass = $("#pass").val();
 			var sendData = { "email":email, "pass":pass };
 
-			if($("#keep_logged:checked")&&($("#email").val()!="")&&($("#pass").val()!="")){
+			if(($("#email").val()!="")&&($("#pass").val()!="")){
 			$.ajax({
 				type: "POST",
-				url: "http://localhost/hobbyhiveapp/logincheck.php",
+				url: "http://dev.myhobbyhive.com/mobileapp/logincheck.php",
 				data: sendData,
 				dataType: "json",
 				success: function(data) {
 					if (data['success']=='0'){
 					var response = data['message'];
 					$("#login").prop('disabled', false);
-					localStorage.setItem("hobby_email", email);
-					localStorage.setItem("hobby_pass", pass);
 					$('.loading').remove();
 					$("#error").html(response);
 					} else { 
-						window.location = 'index.html';
+					localStorage.setItem("hobby_email", email);
+					localStorage.setItem("hobby_pass", pass);
+						window.location = 'userpage.html';
 					}
 				},
 				error: function(data, textStatus, errorThrown) { 

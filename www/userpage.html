@@ -28,6 +28,7 @@
 					<li><div class="info">Mobile : </div><div class="data" id="mobile"></div></li>
 				</ul>
 			</div>
+			<input type="submit" class="sign_up_button" id="Sign_out" value="SIGN OUT" /> 
         </div>
         <!--script type="text/javascript" src="cordova.js"></script-->
         <script type="text/javascript">
@@ -41,7 +42,7 @@
 			$('body').prepend("<div class='loading'></div>");
 			$.ajax({
 				type: "POST",
-				url: "http://localhost/hobbyhiveapp/userpage.php",
+				url: "http://dev.myhobbyhive.com/mobileapp/userpage.php",
 				data: sendData,
 				dataType: "json",
 				success: function(data) {
@@ -61,6 +62,12 @@
 						$('.loading').remove();
                     alert("Status: " + textStatus); alert("Error: " + errorThrown); 
                 } 
+				});
+				$("#Sign_out").click(function(e){
+					e.preventDefault();
+					localStorage.removeItem("hobby_email");
+					localStorage.removeItem("hobby_pass");
+						window.location = 'index.html';
 				});
 			});
 		</script>
