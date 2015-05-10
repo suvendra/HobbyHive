@@ -54,3 +54,17 @@ var app = {
 					window.location = $(this).attr('href');;
 				});
 			});
+document.addEventListener('deviceready', function() {
+    var exitApp = false, intval = setInterval(function (){exitApp = false;}, 1000);
+    document.addEventListener("backbutton", function (e){
+        e.preventDefault();
+        if (exitApp) {
+            clearInterval(intval) 
+            (navigator.app && navigator.app.exitApp()) || (device && device.exitApp())
+        }
+        else {
+            exitApp = true
+            history.back(1);
+        } 
+    }, false);
+}, false);
