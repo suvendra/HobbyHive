@@ -36,6 +36,11 @@
         </script>
 		<script>
 			$(document).ready(function(){
+			document.addEventListener("backbutton", function(e){
+				e.preventDefault();
+				window.location = 'index.html';
+			});
+		
 			var email = localStorage.getItem("hobby_email");
 			var pass = localStorage.getItem("hobby_pass");
 			var sendData = { "email":email, "pass":pass };

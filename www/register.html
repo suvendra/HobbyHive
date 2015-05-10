@@ -46,6 +46,11 @@ on my browser.</label></div>
         </script>
 		<script>
 		$(document).ready(function(){
+			document.addEventListener("backbutton", function(e){
+				e.preventDefault();
+				window.location = 'index.html';
+			});
+		
 			$("#sign_up").click(function(e){
 			e.preventDefault();
 			$(this).prop('disabled', true);

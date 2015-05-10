@@ -43,6 +43,11 @@
         </script>
 		<script>
 		$(document).ready(function(){
+			document.addEventListener("backbutton", function(e){
+				e.preventDefault();
+				window.location = 'index.html';
+			});
+		
 			$("#login").click(function(e){
 			e.preventDefault();
 			$(this).prop('disabled', true);
