@@ -78,6 +78,7 @@ on my browser.</label></div>
 					}
 				},
 				error: function(data, textStatus, errorThrown) { 
+					$("#login").prop('disabled', false);
                     alert("Status: " + textStatus); alert("Error: " + errorThrown); 
                 } 
 

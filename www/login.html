@@ -30,7 +30,6 @@
 					<div id="error"></div>
 					<div class="input"><input type="email" id="email" name="email" placeholder="Email" required/></div>
 					<div class="input"><input type="password" id="pass" name="pass" placeholder="Password" required/></div>
-					<div class="checkbox"><input type="checkbox" id="keep_logged" name="set_cookie" /><label>Keep Me Logged In</label>
 						<div class="forgot_pass"><a href="#">Forgot Password?</a></div>
 					</div>
 					<div class="input"><input type="submit" id="login" class="login" name="submit" value="SUBMIT" /></div>
@@ -75,6 +74,7 @@
 					}
 				},
 				error: function(data, textStatus, errorThrown) { 
+					$("#login").prop('disabled', false);
                     alert("Status: " + textStatus); alert("Error: " + errorThrown); 
                 } 
 
