@@ -121,9 +121,17 @@ input[type="email"], input[type="password"] {
   border: 0px;
   padding: 10px;
   margin: 4px auto;
-  background: url(../img/signup_button.png) center center no-repeat;
+  /*background: url(../img/signup_button2.png) center center no-repeat;*/
   color: white;
   cursor:pointer;
+}
+.sign_up_btn{
+  background: url(../img/signup_button2.png) center center no-repeat;
+  background-size:100% 100%;
+}
+.logout{
+  background: url(../img/signup_button.png) center center no-repeat;
+  background-size:100% 100%;
 }
 .login {
   width: 290px;
@@ -142,7 +150,8 @@ input[type="email"], input[type="password"] {
   width: 290px;
   margin: 10px auto;
   font-size: 14px;
-}
+  height: 20px;
+ }
 .redirect {
   margin: 30px auto 0px;
   text-align: left;
