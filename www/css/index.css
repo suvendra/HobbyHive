@@ -32,17 +32,20 @@
     font-family: Roboto-Bold;
     src: url(font/Roboto-Bold.ttf);
 }
+@font-face {
+    font-family: Roboto-Medium;
+    src: url(font/Roboto-Medium.ttf);
+}
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
-
+html {
+  height: 100%;
+}
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:url(../img/bg.jpg);
-    background-attachment:fixed;
     font-family:'Roboto-Thin', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:15px;
     height:100%;
@@ -50,10 +53,20 @@ body {
     padding:0px;
     width:100%;
 	color:#403212;
+	position:relative;
+}
+.body{
+    background-color:#E4E4E4;
+    background-image:url(../img/bg.jpg);
+    background-attachment:fixed;
 }
 .logo_home {
   text-align: center;
   margin: 50px auto 20px;
+}
+a {
+  color: inherit;
+  text-decoration: none;
 }
 h1 {
   text-align: center;
@@ -78,9 +91,52 @@ hr {
   height: 1px;
   margin: 15px auto;
 }
+.clearfix {
+  clear: both;
+}
 .app {
   text-align: center;
 }
+/************* Menu **************/
+
+.menu_container {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 99;
+  top: 50px;
+  display:none;
+}
+.menu_item {
+  list-style: none;
+  margin: 0px;
+  margin-left: 40%;
+  background: url(../img/bg.jpg),#ffa905;
+  height: 100%;
+  padding: 0px;
+}
+.menu_item li {
+  color: white;
+  border-bottom: 1px solid white;
+  padding: 10px;
+  font-family: "Roboto";
+  font-size: 18px;
+}
+.social_share {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+  padding: 200px 0px 0px;
+  background: rgba(0, 0, 0, 0.83);
+  display:none;
+}
+/************* Menu **************/
+
 .white_text {
   width: 260px;
   background: white;
@@ -217,3 +273,574 @@ input[type="email"], input[type="password"] {
   vertical-align: top;
   font-family: "Roboto-Bold";
 }
+/************** Social Wall ********************/
+.header {
+  height: 40px;
+  padding: 5px 20px;
+  text-align: center;
+  background: url(../img/bg.jpg);
+  background-attachment: fixed;
+}
+.logo_prm {
+  height: 100%;
+  display: inline-block;
+  width: 43px;
+  float: left;
+}
+.logo_prm img {
+  height: 100%;
+}
+.page_title {
+  display: inline-block;
+  font-family: "Roboto-Bold";
+  font-size: 20px;
+  padding: 10px 0px;
+}
+.menu {
+  background: url(../img/nav_bar.png) center center no-repeat;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+}
+.content {
+  padding: 20px;
+  background: white;
+}
+.status {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #ffa200;
+  padding: 10px 0px;
+  font-family: "Roboto-Medium";
+  text-indent: 10px;
+}
+.wall_title {
+  color: #fdcb59;
+  font-size: 14px;
+  font-family: "Roboto-Medium";
+  margin-bottom: 10px;
+  padding-left: 20px;
+  background: url(../img/status.png) center left no-repeat;
+}
+.upload {
+  display: inline-block;
+}
+.upload>div {
+  display: inline-block;
+  margin: 15px 5px 0px 0px;
+  cursor: pointer;
+}
+.post {
+  background: #ffa200;
+  display: inline-block;
+  float: right;
+  padding: 5px 15px;
+  margin: 10px 0px;
+  border-radius: 5px;
+  color: white;
+  font-family: "Roboto-Medium";
+  cursor:pointer;
+}
+.posts {
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-family: "Roboto-Medium";
+  font-size: 12px;
+}
+.post_content {
+  padding: 5px;
+  min-height: 40px;
+}
+.profile_img {
+  width: 40px;
+  height: 100%;
+  background-size: 100%;
+  float: left;
+  min-height: 40px;
+  border-radius: 5px;
+}
+.profile_img img {
+  width: 100%;
+}
+.post_text {
+  padding-left: 60px;
+  padding-right: 10px;
+  position: relative;
+}
+.author {
+  margin-bottom: 10px;
+  color: #9c9ca8;
+}
+.post_img img {
+  width: 100%;
+  margin: 10px 0px;
+}
+.post_social {
+  width: 100%;
+  height: 30px;
+  background: #eaeaea;
+}
+.comment_share {
+  float: left;
+  margin-left: 10px;
+}
+.comment {
+  display: inline-block;
+  padding: 8px 5px 8px 20px;
+  background: url(../img/comment.png)center left no-repeat;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.share {
+  display: inline-block;
+  padding: 8px 10px 8px 20px;
+  background: url(../img/share.png) center left no-repeat;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.post_stats {
+  float: right;
+  margin-right: 10px;
+}
+.comment_count {
+  display: inline-block;
+  padding: 8px 5px 8px 20px;
+  background: url(../img/comment_count.png) center left no-repeat;
+  cursor: pointer;
+}
+.share_count {
+  display: inline-block;
+  padding: 8px 5px 8px 20px;
+  background: url(../img/like.png)center left no-repeat;
+  cursor: pointer;
+}
+.delete {
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+/************** Social Wall ********************/
+/************** Social Comment *****************/
+
+.post_comment {
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  margin-top: 0px;
+  font-family: "Roboto-Medium";
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.add_comment {
+  margin: 10px 0px 0px;
+}
+.comment_del {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+}
+/************** Social Comment *****************/
+
+/************** Messages Page ******************/
+
+.msg_list {
+  padding: 0px;
+  background: white;
+  list-style: none;
+  font-family: "Roboto-Medium";
+  font-size: 12px;
+  margin:0px;
+}
+.msg_list li {
+  padding: 5px 20px;
+  min-height: 40px;
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+}
+.msgr_img {
+  width: 40px;
+  height: 100%;
+  background-size: 100%;
+  float: left;
+  min-height: 40px;
+  border-radius: 5px;
+}
+.msg_body {
+  padding-left: 60px;
+  padding-right: 10px;
+  position: relative;
+}
+.msg_date {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  color: #a2a2a2;
+}
+.msg_author {
+  margin-bottom: 5px;
+  color: #9c9ca8;
+}
+.more {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  background: url(../img/more.png) center center no-repeat;
+  top: 15px;
+  right: 1px;
+  background-size: 100%;
+  opacity: 0.5;
+}
+.unread {
+  background: #f0f0f0;
+}
+.unread .more {
+  opacity: 1;
+}
+
+/************** Messages Page ******************/
+
+
+/************** Single message ******************/
+.msg_single {
+  padding: 5px 20px;
+  border-bottom: 1px solid #eaeaea;
+  min-height: 40px;
+}
+.msg_head {
+  padding-left: 50px;
+  padding-right: 10px;
+  position: relative;
+  padding-top: 11px;
+}
+.msg_by {
+  font-family: "Roboto";
+}
+.msg_head .msg_date {
+  top: 11px;
+}
+.msg {
+  padding: 20px;
+  font-family: "Roboto";
+  font-size: 14px;
+}
+.msg_footer {
+  padding: 10px 0px;
+  background: #fdd86c;
+  position: absolute;
+  width: 100%;
+  bottom: 51px;
+  z-index: 9;
+  color: #c17019;
+  font-family: "Roboto-Bold";
+  font-size: 12px;
+}
+.reply {
+  color: #242424;
+  float: left;
+  padding: 5px 0px 0px 20px;
+  margin-left: 20px;
+  background: url(../img/reply.png) center left no-repeat;
+}
+.mark_read {
+  float: right;
+  padding: 5px 0px 0px 20px;
+  margin-right: 20px;
+  background: url(../img/mark_read.png) center left no-repeat;
+}
+.delete_msg {
+  float: right;
+  padding: 5px 0px 0px 15px;
+  margin-right: 20px;
+  background: url(../img/delete_msg.png) center left no-repeat;
+}
+/************** Single message ******************/
+/************** Message Reply ******************/
+
+.msg_history {
+  margin-top: 30px;
+}
+.title {
+  padding: 5px 20px;
+  background: linear-gradient(#eaeaea,#ffffff);
+  font-family: "Roboto";
+}
+.msg_short {
+  cursor: pointer;
+}
+.delete_big {
+  background: #eaeaea;
+  font-family: "Roboto";
+  font-size: 12px;
+  padding: 5px 20px;
+  color: #c17019;
+  text-align: right;
+  display:none;
+}
+.delete_big span {
+  padding-left: 20px;
+  background: url(../img/delete_msg.png) center left no-repeat;
+}
+
+/************** Message Reply ******************/
+
+
+/************** Profile ******************/
+
+.profile_main {
+  text-align: center;
+  margin: 20px 0px;
+}
+.profile_pic img {
+  max-width: 100px;
+}
+.profile_name {
+  font-family: "Roboto-Bold";
+  font-size: 18px;
+  margin: 5px 0px;
+}
+.profile_des {
+  font-family: "Roboto";
+  margin-bottom: 10px;
+}
+.btn {
+  display: inline-block;
+  font-family: "Roboto";
+  background: #ffa200;
+  padding: 5px 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: white;
+}
+.trophy {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+}
+.trophy img {
+  width: 18%;
+}
+.title span {
+  float: right;
+  color: #ffa200;
+  font-size: 12px;
+  padding: 2px 5px 2px 10px;
+}
+.title_big {
+  padding: 10px 20px;
+  background: #312827;
+  color: #fdcb59;
+  font-family: "Roboto-Medium";
+  text-transform: uppercase;
+}
+.profile_edit {
+  padding: 20px;
+  overflow: hidden;
+}
+.profile_edit label {
+  font-family: "Roboto-Bold";
+  font-size: 14px;
+}
+select, .profile_edit input[type="password"], input[type="text"] {
+  width: 100%;
+  line-height: 20px;
+  border-radius: 5px;
+  border: 1px solid #ffa200;
+  padding: 10px 0px;
+  text-indent: 10px;
+  margin: 8px auto;
+  font-family: "Roboto-Medium";
+}
+.edit_img {
+  margin: 10px 0px;
+}
+.original_img {
+  float: left;
+}
+.upload_img {
+  display: inline-block;
+  vertical-align: top;
+  color: red;
+  font-family: "Roboto";
+  font-size: 12px;
+  text-decoration: underline;
+  margin: 5px;
+}
+.allowed_img {
+  display: inline-block;
+  font-size: 12px;
+  font-family: "Roboto";
+  margin: 2px 5px;
+}
+.right {
+  float: right;
+}
+.left {
+  float: left;
+}
+.circle {
+  margin: 10px 0px;
+  text-align: center;
+  background: url(../img/line_through.png) center center no-repeat;
+}
+.circle>div {
+  width: 58px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  font-family: "Roboto";
+  font-size: 10px;
+  text-align: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  color: white;
+  text-transform: uppercase;
+}
+.green {
+  background: #218745;
+}
+.yellow {
+  background: #ffcc4f;
+  color: black !important;
+}
+.black {
+  background: #202020;
+}
+.add_more {
+  width: 40px;
+  height: 40px;
+  background: url(../img/add_more.png);
+  display: inline-block;
+  vertical-align: middle;
+  background-size: 100%;
+  cursor:pointer;
+}
+.club_country {
+  width: 80% !important;
+}
+.club_dir {
+  padding: 20px;
+}
+.club_img {
+  float: left;
+}
+.club_info {
+  padding-left: 80px;
+  font-size: 14px;
+  font-family: "Roboto";
+}
+.club_name {
+  font-family: "Roboto-Bold";
+  margin-bottom: 5px;
+}
+/************** Profile ******************/
+
+
+/************** Find Hobby ******************/
+.hobby_search {
+  padding: 20px;
+}
+.title_large {
+  text-align: center;
+  font-family: "Roboto-Bold";
+  font-size: 22px;
+}
+.sec_title {
+  font-family: "Roboto-Medium";
+  text-align: center;
+  font-size: 16px;
+}
+.hobby_img {
+  text-align: center;
+  margin: 10px 0px;
+  overflow:hidden;
+}
+.hobby_items {
+  float: left;
+  width: 30%;
+  margin-right: 4.5%;
+  font-family: "Roboto-Medium";
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.hobby_items img {
+  width: 100%;
+}
+.last {
+  margin-right: 0px;
+}
+.hobby_detail {
+  padding: 20px;
+}
+.hobby_det_title {
+  font-family: "Roboto-Bold";
+  font-size: 16px;
+}
+.hobbydetails {
+  font-family: "Roboto";
+  font-size: 14px;
+  margin: 10px 0px;
+}
+/************** Find Hobby ******************/
+
+
+/************* Footer Links ********************/
+.links {
+  width: 100%;
+  position: fixed;
+  background: white;
+  border-top: 1px solid #eaeaea;
+  height: 50px;
+  bottom: 0px;
+  box-shadow: 0px 0px 25px 10px white;
+}
+.links>a>div {
+  display: inline-block;
+  width: 19%;
+  font-size: 10px;
+  font-family: "Roboto-Medium";
+  text-align: center;
+  padding-top: 30px;
+  margin-top: 5px;
+  color: #adadad;
+}
+.social_wall {
+  background: url(../img/social_wall.png) center top no-repeat;
+}
+.profile {
+  background: url(../img/profile.png) center top no-repeat;
+}
+.messages {
+  background: url(../img/message.png) center top no-repeat;
+}
+.diary {
+  background: url(../img/diary.png) center top no-repeat;
+}
+.hobby_link {
+  background: url(../img/hobby_link.png) center top no-repeat;
+}
+.social_wall.selected {
+  background: url(../img/social_wall2.png) center top no-repeat;
+}
+.profile.selected {
+  background: url(../img/profile2.png) center top no-repeat;
+}
+.messages.selected {
+  background: url(../img/message2.png) center top no-repeat;
+}
+.diary.selected {
+  background: url(../img/diary2.png) center top no-repeat;
+}
+.hobby_link.selected {
+  background: url(../img/hobby_link2.png) center top no-repeat;
+}
+.selected {
+  color: #ffa200 !important;
+}
+.white_space {
+  width: 100%;
+  height: 51px;
+}
+/************* Footer Links ********************/

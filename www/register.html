@@ -18,7 +18,7 @@
         <script type="text/javascript" src="js/index.js"></script>
         <title>New to myhobbyhive</title>
     </head>
-    <body>
+    <body class="body">
         <div class="app">
 			<div class="logo_home"><img src="img/logo.png" /></div>
 			<h2>New to myhobbyhive?</h2>
@@ -59,7 +59,7 @@ on my browser.</label></div>
 			var s_pass = $("#s_pass").val();
 			var sendData = { "email":s_email, "pass":s_pass };
 
-			if($("#confirm:checked")&&($("#s_email").val()!="")&&($("#s_pass").val()!="")){
+			if(($("#confirm:checked").length>0)&&($("#s_email").val()!="")&&($("#s_pass").val()!="")){
 			$.ajax({
 				type: "POST",
 				url: "http://dev.myhobbyhive.com/mobileapp/register.php",

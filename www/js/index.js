@@ -17,7 +17,7 @@
  * under the License.
  */
 var app = {
-		document.addEventListener('deviceready', function() {
+/*		document.addEventListener('deviceready', function() {
 			var exitApp = false, intval = setInterval(function (){exitApp = false;}, 1000);
 			document.addEventListener("backbutton", function (e){
 				e.preventDefault();
@@ -31,10 +31,27 @@ var app = {
 				} 
 			}, false);
 		}, false);
+	*/	}
 			$(document).ready(function(){
 				$('a').click(function(e){
 					e.preventDefault();
 					$('body').prepend("<div class='loading'></div>");
 					window.location = $(this).attr('href');;
+				});
+				$('#menu').click(function(e){
+					e.preventDefault();
+					$('.menu_container').toggle('slide',{direction:'right'},400);
+				});
+				$('.share').click(function(e){
+					e.preventDefault();
+					$('.social_share').fadeIn();
+				});
+				$(".social_share").click(function(e){
+					e.preventDefault();
+					$(".social_share").hide();
+				});
+				$(".msg_short").click(function(e){
+					e.preventDefault();
+					$(this).children(".delete_big").slideToggle();
 				});
 			});
