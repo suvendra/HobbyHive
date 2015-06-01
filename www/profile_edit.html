@@ -10,6 +10,7 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -26,29 +27,36 @@
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
 			<a href="#"><li>Cookies</li></a>
+			<a href="#" id="logout"><li>Logout</li></a>
 		</ul>
 	</div>
 	<div class="title_big">My Personal Details</div>
 	<div class="profile_edit">
+	<form class="profile_form" id="profile_form" method="post" action="" enctype="multipart/form-data">
+		<div id="error"></div>
 		<label for="name">Name:</label>
-		<input type="text" name="name" placeholder="Mark Robinson" />
+		<input type="text" id="name" name="name" placeholder="" />
 		<label for="about_us">Tell us about yourself:</label>
-		<textarea class="status" name="about_you" placeholder="Hi I am Mark, I drive Jeep"></textarea>
+		<textarea class="status" id="about_you" name="about_you" placeholder=""></textarea>
 		<label for="upload_img">Tell us about yourself:</label>
 		<div class="edit_img">
-			<div class="original_img"><img src="img/profile_img.png" /></div>
-			<div class="upload_img">Upload Profile Image</div>
+			<div class="original_img" id="original_img"></div>
+			<div class="upload_img"><input type="file" name="upload_img" id="upload_img"/>Upload Profile Image</div>
 			<div class="allowed_img">(Only jpg, jpeg, gif format, upto 2MB size)</div>
 		</div>
-		<div class="post right">Update</div>
+		<div class="post right submit" id="update_info"><input type="submit" value="Update"/></div>
+	</form>
 	</div>
 	<div class="title_big">Change Password</div>
 	<div class="profile_edit">
+	<form name="pass_reset" id="pass_reset" method="POST" action="" enctype="multipart/form-data">
+		<div id="error2"></div>
 		<label for="password">New Password:</label>
-		<input type="password" name="name" placeholder="Mark Robinson" />
+		<input type="password" name="pass" id="pass" />
 		<label for="confirm_pass">Confirm Password:</label>
-		<input type="password" name="confirm_pass" placeholder="Mark Robinson" />
-		<div class="post right">Update</div>
+		<input type="password" name="confirm_pass" id="confirm_pass"/>
+		<div class="post right submit"><input type="submit" name="submit" value="Update" /></div>
+	</form>
 	</div>
 	<div class="white_space"></div>
 	<footer>
@@ -60,5 +68,110 @@
 			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
 		</div>
 	</footer>
+        <script type="text/javascript" src="cordova.js"></script>
+        <!--script type="text/javascript">
+            app.initialize();
+        </script-->
+		<script>
+			$(document).ready(function(){		
+			var id = localStorage.getItem("hobby_userID");
+			var sendData = { "id": id};
+			$('body').append("<div class='loading'></div>");
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/profile.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+						$("#name").attr("placeholder",data['fname']+" "+ data['lname']);
+						$("#about_you").attr("placeholder",data['aboutme']);
+						$("#original_img").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
+						$('.loading').remove();
+					}
+					
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+			
+				$("#upload_img").change(function() {
+				var file = this.files[0];
+				var imagefile = file.type;
+				var match= ["image/jpeg","image/png","image/jpg"];
+				if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2])))
+				{
+				//$('#original_img').attr('src','noimage.png');
+				return false;
+				}
+				else
+				{
+				var reader = new FileReader();
+				reader.onload = imageIsLoaded;
+				reader.readAsDataURL(this.files[0]);
+				}
+				});
+				function imageIsLoaded(e) {
+				$(".upload_img").css("color","green");
+				$('#original_img img').attr('src', e.target.result);
+				};
+				$("#profile_form").on('submit',function(e){
+					e.preventDefault();
+					$('body').append("<div class='loading'></div>");
+					var formdata = new FormData(this);
+					var id = localStorage.getItem("hobby_userID");
+					formdata.append('id', id);
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/profile_edit.php",
+						data: formdata,
+						dataType: "json",
+						contentType: false,
+						//cache: false,
+						processData:false,
+						success: function(data) {
+							if(data["success"]==1){
+								window.location = "profile.html";
+							} else {
+								$("#error").html(data["message"]);
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
+					});
+				});
+
+
+
+
+				$("#pass_reset").on('submit',function(e){
+					e.preventDefault();
+					$('body').append("<div class='loading'></div>");
+					//var passform = new FormData(this);
+					var pass = $('#pass').val();
+					var confirm_pass = $('#confirm_pass').val();
+					var id = localStorage.getItem("hobby_userID");
+					sendData = {'id':id,'pass':pass,'confirm_pass':confirm_pass};
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/pass_reset.php",
+						data: sendData,
+						dataType: "json",
+						//processData: false,
+						success: function(data) {
+							if(data["success"]==1){
+								localStorage.removeItem("hobby_userID");
+								window.location = "login.html";
+							} else {
+								$("#error2").html(data["message"]);
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
+					});
+				});
+			});
+		</script>
 </body>
 </html>

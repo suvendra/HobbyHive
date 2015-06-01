@@ -10,6 +10,7 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -26,38 +27,23 @@
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
 			<a href="#"><li>Cookies</li></a>
+			<a href="#" id="logout"><li>Logout</li></a>
 		</ul>
 	</div>
 	<div class="content">
 		<div class="wall_title">WRITE STATUS</div>
-		<div class="write_wall"><textarea class="status" placeholder="Write on hobby wall?" rows="5"></textarea></div>
+	<form id="status" name="status" method="POST" action="">
+		<div id="error"></div>
+		<div class="write_wall"><textarea class="status" name="text_status" placeholder="Write on hobby wall?" rows="5"></textarea></div>
 		<div class="form_submit">
 			<div class="upload">
 				<div id="photo"><img src="img/picture.png" /></div>
 				<div id="video"><img src="img/video.png" /></div>
 			</div>
-			<div class="post">POST</div>
+			<div class="post submit"><input type="submit" name="submit" value="POST"></div>
 		</div>
-		<div class="posts">
-			<div class="post_content">
-				<div class="profile_img"><img src="img/profile_img.png" /></div>
-				<div class="post_text">
-					<div class="author">From : Some writer</div>
-					<div class="status_text">Taken at this weeks race meet, showing Pete as the winner</div>
-					<div class="post_img"><img src="img/post_img.png" /></div>
-				</div>
-			</div>
-			<div class="post_social">
-				<div class="comment_share">
-					<a href="social_comment.html"><div class="comment">Comment</div></a>
-					<div class="share">Share</div>
-				</div>
-				<div class="post_stats">
-					<a href="social_comment.html"><div class="comment_count">10</div></a>
-					<div class="share_count">18</div>
-					<div class="delete"><img src="img/delete.png" /></div>
-				</div>
-			</div>
+	</form>
+		<div id="post_container">
 		</div>
 		<div class="white_space"></div>
 	</div>
@@ -77,6 +63,87 @@
 		<a href="#"><img src="img/social_mail.png" /></a>
 		<a href="#"><img src="img/social_more.png" /></a>
 	</div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <!--script type="text/javascript">
+            app.initialize();
+        </script-->
+		<script>
+			$(document).ready(function(){
+			$('body').append("<div class='loading'></div>");
+			var id = localStorage.getItem("hobby_userID");
+			var sendData = { "id": id};
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/social_wall.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+						var post = [];
+						for (var i in data['postID']){
+							if((data['postimage'][i] == "")||(data['postimage'][i] == null)){
+								var img = '';
+							}else { 
+								var img = "<img src='img/"+data['postimage'][i]+"' />";
+							}
+							if(data['f_image'][data['postedby'][i]] == ""){
+								data['f_image'][data['postedby'][i]] = "noimage.png";
+							}							
+							if(data['f_fname'][data['postedby'][i]] == null){
+								data['f_fname'][data['postedby'][i]] = "";
+							}							
+							if(data['f_lname'][data['postedby'][i]] == null){
+								data['f_lname'][data['postedby'][i]] = "";
+							}							
+							post.push("		<div class='posts' data-value="+data['postID'][i]+">		<div class='post_content'>				<div class='profile_img'><img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['f_image'][data['postedby'][i]]+"' /></div>				<div class='post_text'>					<div class='author'>From : "+data['f_fname'][data['postedby'][i]]+" "+data['f_lname'][data['postedby'][i]]+"</div>					<div class='status_text'>"+data['text'][i]+"</div>					<div class='post_img'>"+img+"</div>				</div>			</div>			<div class='post_social'>				<div class='comment_share'>					<div class='comment' data-value="+data['postID'][i]+">Comment</div>					<div class='share' data-value="+data['postID'][i]+">Share</div>				</div>				<div class='post_stats'>					<a href='social_comment.html'><div class='comment_count'>"+data['comment'][i]+"</div></a>					<div class='share_count'>"+data['like'][i]+"</div>					<div class='delete'><img src='img/delete.png' /></div>				</div>			</div>		</div>");
+						}
+							$("#post_container").html(post.join(''));							
+						$('.loading').remove();
+					}else {
+						$('#post_container').html(data['message']);
+						$('.loading').remove();						
+					}
+					
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+				$("#post_container").on("click", ".comment", function(e) {
+					localStorage.setItem("hobby_comment", $(this).data('value'));
+					window.location = 'social_comment.html';					
+				});
+
+
+				$("#status").on('submit',function(e){
+					e.preventDefault();
+					$('body').append("<div class='loading'></div>");
+					var formdata = new FormData(this);
+					formdata.append('id',id);
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/add_status.php",
+						data: formdata,
+						dataType: "json",
+						contentType: false,
+						//cache: false,
+						processData:false,
+						success: function(data) {
+							if(data["success"]==1){
+								location.reload();
+								$('.loading').remove();					
+							} else {
+								$('#error').html(data["message"]);
+								$('.loading').remove();					
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+						} 
+					});
+				});
+				
+			});
+		</script>
 </body>
 </html>
-			

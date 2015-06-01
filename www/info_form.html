@@ -28,55 +28,36 @@
 			<a href="#"><li>Career</li></a>
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
-			<a href="#"><li>Cookies</li></a>
-			<a href="#" id="logout"><li>Logout</li></a>
+			<a href="#"><li>Cookies</li></a>			
+			<a href="#" id="logout"><li>Logout</li></a>	
 		</ul>
 	</div>
-	<div class="circle">
-		<div class="green">Register</div>
-		<div class="yellow">profile</div>
-		<div class="black">address</div>
-		<div class="black">social</div>
-		<div class="black">members</div>
-	</div>
 	<div class="profile_edit">
-	<form name="club_register" id="club_register" method="POST" action="">
+	<form name="user_register" id="user_register" method="POST" action="">
 		<div id="error"></div>
-		<label for="name">Club Name:</label>
-		<input type="text" name="name" placeholder="" />
-		<label for="hobby">Club Hobby:</label>
+		<label for="hobby">Hobby:</label>
 		<select name="hobby" class="hobby" id="hobby">
 			<option value="1"></option>
 			<option value="2">Option 1</option>
 			<option value="3">Option 2</option>
 		</select>
-		<label for="country">Club Country:</label>
+		<label for="country">Country:</label>
 		<select name="country" class="hobby" id="country">
 			<option value="1"></option>
 			<option value="2">Option 1</option>
 			<option value="3">Option 2</option>
 		</select>
-		<label for="about_club">About Club:</label>
-		<textarea class="status" name="about_club"></textarea>
+		<label for="about_you">About Me:</label>
+		<textarea class="status" name="about_me"></textarea>
 		<div class = "upload_logo_container">
-			<label for="name">Club Logo:</label><br />
+			<label for="name">Profile Image:</label><br />
 			<div id="logo_preview"><img src="https://www.myhobbyhive.com/clubuserimages/profile/noimage.png" /></div>
-			<input type="file" name="club_logo" id="club_logo" class="club_country" style="display:none" />
+			<input type="file" name="profile_img" id="club_logo" style="display:none" />
 			<div class="add_more" id="add_more"></div>
 		</div>
-		<div class="post submit"><input type="submit" name="submit" value="NEXT >" /></div>
+		<div class="post submit"><input type="submit" name="submit" value="SUBMIT" /></div>
 	</form>
 	</div>
-	<div class="white_space"></div>
-	<footer>
-		<div class="links">
-			<a href="social_wall.html"><div class="social_wall">Social Wall</div></a>
-			<a href="profile.html"><div class="profile selected">Profile</div></a>
-			<a href="messages.html"><div class="messages">Messages</div></a>
-			<a href="diary.html"><div class="diary">Diary</div></a>
-			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
-		</div>
-	</footer>
 		<script>
 			$(document).ready(function(){				
 			$('body').append("<div class='loading'></div>");
@@ -102,7 +83,6 @@
 			function imageIsLoaded(e) {
 			$('#logo_preview img').attr('src', e.target.result);
 			};
-			
 			var id = localStorage.getItem("hobby_userID");
 			sendData = {'id':id};
 			$.ajax({
@@ -162,15 +142,15 @@
 				});
 
 
-				$("#club_register").on('submit',function(e){
+				$("#user_register").on('submit',function(e){
 					e.preventDefault();
 					$('body').append("<div class='loading'></div>");
-					var formdata = new FormData(this);
 					var id = localStorage.getItem("hobby_userID");
-					formdata.append('id',id);
+					var formdata = new FormData(this);
+					formdata.append('id', id);
 					$.ajax({
 						type: "POST",
-						url: "http://www.mhhdev.com/mobileapp/newdb/register_club.php",
+						url: "http://www.mhhdev.com/mobileapp/newdb/user_info.php",
 						data: formdata,
 						dataType: "json",
 						contentType: false,
@@ -178,8 +158,7 @@
 						processData:false,
 						success: function(data) {
 							if(data["success"]==1){
-								localStorage.setItem("hobby_newclubID", data["hobby_newclubID"]);
-								window.location = "add_club_profile.html"
+								window.location = "social_wall.html"
 								$('.loading').remove();					
 							} else {
 								$("#error").html(data["message"]);
@@ -190,6 +169,7 @@
 							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
 					});
 				});
+				
 
 			});
 		</script>	

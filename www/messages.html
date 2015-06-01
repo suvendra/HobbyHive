@@ -10,6 +10,7 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -26,108 +27,10 @@
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
 			<a href="#"><li>Cookies</li></a>
+			<a href="#" id="logout"><li>Logout</li></a>
 		</ul>
 	</div>
-	<ul class="msg_list">
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd1.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="unread">
-			<div class="msgr_img"><img src="img/frnd2.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="unread">
-			<div class="msgr_img"><img src="img/frnd3.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd1.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd1.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd3.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="unread">
-			<div class="msgr_img"><img src="img/frnd2.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd3.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd3.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd2.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
-		<li class="">
-			<div class="msgr_img"><img src="img/frnd1.png"/></div>
-			<div class="msg_body">
-				<div class="msg_date">28-nov-2014</div>
-				<div class="msg_author">Admin</div>
-				<div class="msg_text">Lorem ipsum dolor sit amet, consectetur ...</div>
-				<a href="message.html"><div class="more"></div></a>
-			</div>
-		</li>
+	<ul class="msg_list" id="msg_list">
 	</ul>
 	<div class="white_space"></div>
 	</div>
@@ -140,5 +43,46 @@
 			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
 		</div>
 	</footer>
+        <script type="text/javascript" src="cordova.js"></script>
+        <!--script type="text/javascript">
+            app.initialize();
+        </script-->
+		<script>
+			$(document).ready(function(){		
+			var id = localStorage.getItem("hobby_userID");
+			var sendData = { "id": id};
+			$('body').append("<div class='loading'></div>");
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/messages.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+						var messages = [];
+						for (var i in data['date']){
+							if(data['isread'][i] == 0){
+								var isread = 'unread';
+							}else { var isread = ''; }
+							messages.push("<li class='"+isread+"' data-value="+data['messagePK'][i]+"><div class='msgr_img'><img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image'][i]+"'/></div><div class='msg_body'>				<div class='msg_date'>"+data['date'][i]+"</div>				<div class='msg_author'>From: "+data['sendername'][i]+"</div>				<div class='msg_text'>"+data['messagebody'][i].substring(0,50)+"...</div>				<a href='message.html'><div class='more'></div></a>			</div>		</li>");
+						}
+							$("#msg_list").html(messages.join(''));							
+						$('.loading').remove();
+					}else {
+						$('#msg_list').html("<div class='empty'>No recieved Messages</div>");
+						$('.loading').remove();						
+					}
+					
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+				$("#msg_list").on("click", "li", function() {
+					localStorage.setItem("messagePK", $(this).data('value'));
+					window.location = 'message.html';
+				});
+			});
+		</script>
 </body>
 </html>

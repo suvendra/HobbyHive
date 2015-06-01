@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+	<link rel="stylesheet" href="css/jquery.selectlist.css">
+	<script src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/jquery.selectlist.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
+    <title>My Hobby Hive</title>
+</head>
+<body>
+	<header class="header">
+		<div class="logo_prm"><img src="img/logo_small.png" /></div>
+		<div class="page_title">Profile</div>
+		<div class="menu" id="menu"></div>
+	</header>
+	<div class="menu_container">
+		<ul class="menu_item">
+			<a href="#"><li>About Us</li></a>
+			<a href="#"><li>Tell a Friend</li></a>
+			<a href="#"><li>Career</li></a>
+			<a href="#"><li>FAQ's</li></a>
+			<a href="#"><li>Data Use Policy</li></a>
+			<a href="#"><li>Cookies</li></a>
+			<a href="#" id="logout"><li>Logout</li></a>
+		</ul>
+	</div>
+	<div class="circle">
+		<div class="green">Register</div>
+		<div class="yellow">profile</div>
+		<div class="black">address</div>
+		<div class="black">social</div>
+		<div class="black">members</div>
+	</div>
+	<div class="profile_edit">
+	<form name="club_social" id="club_social" method="POST" action="">
+		<div id="error"></div>
+		<label for="name">myHobbyHive Site :</label>
+		<input type="text" name="site" placeholder="https://myhobbyhive.com/" />
+		<label for="name">Club Facebook URL :</label>
+		<input type="text" name="facebook" placeholder="" />
+		<label for="name">Club Twitter URL :</label>
+		<input type="text" name="twitter" placeholder="" />
+		<label for="name">Club Youtube URL :</label>
+		<input type="text" name="youtube" placeholder="" />
+		<label for="name">Club Google+ URL :</label>
+		<input type="text" name="google" placeholder="" />
+		<div class="post submit"><input type="submit" name="submit" value="FINISH" /></div>
+	</form>
+	</div>
+	<div class="white_space"></div>
+	<footer>
+		<div class="links">
+			<a href="social_wall.html"><div class="social_wall">Social Wall</div></a>
+			<a href="profile.html"><div class="profile selected">Profile</div></a>
+			<a href="messages.html"><div class="messages">Messages</div></a>
+			<a href="diary.html"><div class="diary">Diary</div></a>
+			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
+		</div>
+	</footer>
+		<script>
+			$(document).ready(function(){				
+			var hobby_newclubID = localStorage.getItem("hobby_newclubID");
+			localStorage.removeItem("hobby_newclubID");
+				$("#club_social").on('submit',function(e){
+					e.preventDefault();
+					$('body').append("<div class='loading'></div>");
+					var formdata = new FormData(this);
+					formdata.append('hobby_newclubID',hobby_newclubID);
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/register_club_social.php",
+						data: formdata,
+						dataType: "json",
+						contentType: false,
+						//cache: false,
+						processData:false,
+						success: function(data) {
+							if(data["success"]==1){
+								window.location = "join_club.html"
+								$('.loading').remove();					
+							} else {
+								localStorage.setItem("hobby_newclubID", data["hobby_newclubID"]);
+								$("#error").html(data["message"]);
+								$('.loading').remove();					
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+								localStorage.setItem("hobby_newclubID", data["hobby_newclubID"]);
+							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
+					});
+				});
+
+			});
+		</script>	
+</body>
+</html>

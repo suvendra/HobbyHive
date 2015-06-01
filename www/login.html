@@ -12,8 +12,8 @@
         <title>New to myhobbyhive</title>
 		<script>
 		$(function () {
-			if (!(localStorage.getItem("hobby_email") === null)&& !(localStorage.getItem("hobby_pass") === null)){
-			window.location = 'userpage.html';
+			if (!(localStorage.getItem("hobby_userID") === null)){
+			window.location = 'social_wall.html';
 		}
 		});
 		</script>
@@ -51,7 +51,7 @@
 			$("#login").click(function(e){
 			e.preventDefault();
 			$(this).prop('disabled', true);
-			$('body').prepend("<div class='loading'></div>");
+			$('body').append("<div class='loading'></div>");
 			var email = $("#email").val();
 			var pass = $("#pass").val();
 			var sendData = { "email":email, "pass":pass };
@@ -59,7 +59,7 @@
 			if(($("#email").val()!="")&&($("#pass").val()!="")){
 			$.ajax({
 				type: "POST",
-				url: "http://dev.myhobbyhive.com/mobileapp/logincheck.php",
+				url: "http://www.mhhdev.com/mobileapp/newdb/logincheck.php",
 				data: sendData,
 				dataType: "json",
 				success: function(data) {
@@ -69,14 +69,16 @@
 					$('.loading').remove();
 					$("#error").html(response);
 					} else { 
-					localStorage.setItem("hobby_email", email);
-					localStorage.setItem("hobby_pass", pass);
-						window.location = 'userpage.html';
+					localStorage.setItem("hobby_userID", data['id']);
+						if(data['isactive'] == 1){
+							window.location = 'social_wall.html';
+						} else {
+							window.location = 'info_form.html';
+						}
 					}
 				},
 				error: function(data, textStatus, errorThrown) { 
-					$("#login").prop('disabled', false);
-                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
                 } 
 
 			});
@@ -89,7 +91,7 @@
 			});
 				$('a').click(function(e){
 					e.preventDefault();
-					$('body').prepend("<div class='loading'></div>");
+					$('body').append("<div class='loading'></div>");
 					window.location = $(this).attr('href');;
 				});			
 		});

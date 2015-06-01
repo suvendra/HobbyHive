@@ -10,6 +10,8 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -26,62 +28,20 @@
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
 			<a href="#"><li>Cookies</li></a>
+			<a href="#" id="logout"><li>Logout</li></a>
 		</ul>
 	</div>
 	<div class="content">
-		<div class="post_comment">
-			<div class="post_content">
-				<div class="profile_img"><img src="img/profile_img.png" /></div>
-				<div class="post_text">
-					<div class="author">From : Some writer</div>
-					<div class="status_text">Taken at this weeks race meet, showing Pete as the winner</div>
-				</div>
-			</div>
-			<div class="post_social">
-				<div class="comment_share">
-					<div class="share">Share</div>
-				</div>
-				<div class="post_stats">
-					<div class="comment_count">10</div>
-					<div class="share_count">18</div>
-					<div class="delete"><img src="img/delete.png" /></div>
-				</div>
-			</div>
+		<div id="post_container">
 		</div>
+		<form id="add_comment" name="name" method="POST" action="">
 		<div class="add_comment">
 			<textarea name="comment" class="status" id="comment" rows="5" placeholder="Add your comment"></textarea>
-			<div class="post">ADD</div>			
+			<div class="post submit"><input type="submit" name="submit" value="ADD"></div>			
 		</div>
+		</form>
 		<div class="clearfix"></div>
-		<div class="post_comment">
-			<div class="post_content">
-				<div class="profile_img"><img src="img/frnd1.png" /></div>
-				<div class="post_text">
-					<div class="author">From : David</div>
-					<div class="status_text">Welcome!!!</div>
-					<div class="delete comment_del"><img src="img/delete.png" /></div>
-				</div>
-			</div>
-		</div>
-		<div class="post_comment">
-			<div class="post_content">
-				<div class="profile_img"><img src="img/frnd2.png" /></div>
-				<div class="post_text">
-					<div class="author">From : Barba</div>
-					<div class="status_text">Taken at this weeks race meet, showing Pete as the winner</div>
-					<div class="delete comment_del"><img src="img/delete.png" /></div>
-				</div>
-			</div>
-		</div>
-		<div class="post_comment">
-			<div class="post_content">
-				<div class="profile_img"><img src="img/frnd3.png" /></div>
-				<div class="post_text">
-					<div class="author">From : Mark Robins</div>
-					<div class="status_text">Taken at this weeks race meet, showing Pete as the winner</div>
-					<div class="delete comment_del"><img src="img/delete.png" /></div>
-				</div>
-			</div>
+		<div id="comment_section">
 		</div>
 		<div class="white_space"></div>
 	</div>
@@ -101,5 +61,106 @@
 		<a href="#"><img src="img/social_mail.png" /></a>
 		<a href="#"><img src="img/social_more.png" /></a>
 	</div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <!--script type="text/javascript">
+            app.initialize();
+        </script-->
+		<script>
+			$(document).ready(function(){		
+			$('body').append("<div class='loading'></div>");
+			if ((localStorage.getItem("hobby_comment") === null)){
+			window.location = 'social_wall.html';
+			}else{
+				var hobby_comment = localStorage.getItem("hobby_comment");
+				localStorage.removeItem("hobby_comment");
+			var sendData = { "hobby_comment":hobby_comment};
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/social_comment.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+							if((data['postimage'] == "")|| (data['postimage'] == null)){
+							var img = ''; 
+							}else {
+								var img = "<img src='img/"+data['postimage']+"' />";
+							}
+							if(data['a_image'] == ""){
+								data['a_image'] = "noimage.png";
+							}
+							if(data['a_fname'] == null){
+								data['a_fname'] = "";
+							}							
+							if(data['a_lname'] == null){
+								data['a_lname'] = "";
+							}							
+							var post = "		<div class='posts' data-value="+data['postID']+">		<div class='post_content'>				<div class='profile_img'><img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['a_image']+"' /></div>				<div class='post_text'>					<div class='author'>From : "+data['a_fname']+" "+data['a_lname']+"</div>					<div class='status_text'>"+data['text']+"</div>					<div class='post_img'>"+img+"</div>				</div>			</div>			<div class='post_social'>				<div class='comment_share'>					<div class='share' data-value="+data['postID']+">Share</div>				</div>				<div class='post_stats'>					<a href='social_comment.html'><div class='comment_count'>"+data['comment_count']+"</div></a>					<div class='share_count'>"+data['like']+"</div>					<div class='delete'><img src='img/delete.png' /></div>				</div>			</div>		</div>";
+
+							$("#post_container").html(post);
+						if(data['no_comment'] == false){
+							var comments = [];
+							for(var i in data['commentID']){
+							if(data['commentedby_image'][i] == ""){
+								data['commentedby_image'][i] = "noimage.png";
+							}							
+							if(data['commentedby_fname'][i] == null){
+								data['commentedby_fname'][i] = "";
+							}							
+							if(data['commentedby_lname'][i] == null){
+								data['commentedby_lname'][i] = "";
+							}							
+							comments.push('		<div class="post_comment" data-value='+data['commentID'][i]+'>			<div class="post_content">				<div class="profile_img"><img src="https://www.myhobbyhive.com/clubuserimages/profile/'+data['commentedby_image'][i]+'" /></div>				<div class="post_text">					<div class="author">From : '+data['commentedby_fname'][i]+' '+ data['commentedby_lname'][i] +'</div>					<div class="status_text">'+data['comment'][i]+'</div>					<div class="delete comment_del"><img src="img/delete.png" /></div>				</div>			</div>		</div>');
+							}
+							$("#comment_section").html(comments.join(''));
+						}else{$("#comment_section").html('No Comment');}
+						$('.loading').remove();
+					}else {
+						$('#post_container').html(data['message']);
+						$('.loading').remove();						
+					}
+					
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+			}
+			
+				$("#add_comment").on('submit',function(e){
+					e.preventDefault();
+					$('body').append("<div class='loading'></div>");
+					var formdata = new FormData(this);
+					var postID = $(".posts").data('value');
+					var id = localStorage.getItem("hobby_userID");
+					formdata.append('postID', postID);
+					formdata.append('id', id);
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/add_comment.php",
+						data: formdata,
+						dataType: "json",
+						contentType: false,
+						//cache: false,
+						processData:false,
+						success: function(data) {
+							if(data["success"]==1){
+								localStorage.setItem("hobby_comment", data['postID']);
+								location.reload();
+								$('.loading').remove();					
+							} else {
+								alert(data["message"]);
+								$('.loading').remove();					
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
+					});
+				});
+			
+			
+			
+			});
+		</script>
 </body>
 </html>

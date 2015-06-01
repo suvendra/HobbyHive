@@ -10,6 +10,7 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -26,20 +27,21 @@
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
 			<a href="#"><li>Cookies</li></a>
+			<a href="#" id="logout"><li>Logout</li></a>
 		</ul>
 	</div>
-	<div class="msg_single">
-		<div class="msgr_img"><img src="img/frnd1.png"/></div>
+	<div class="msg_single" id="msg_single" data-value="0">
+		<div class="msgr_img" id="msgr_img"></div>
 		<div class="msg_head">
-			<div class="msg_date">28-nov-2014</div>
-			<div class="msg_by">From : Admin</div>
+			<div class="msg_date" id="msg_date"></div>
+			<div class="msg_by" id="msg_by"></div>
 		</div>
 	</div>
-	<div class="msg">Hi, I have created a challenge for you. Have a have created a challenge for you. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+	<div class="msg" id="msg"></div>
 	<div class="msg_footer">
-		<a href="msg_reply.html"><div class="reply">Reply</div></a>
-		<a href="#"><div class="delete_msg">Delete</div></a>
-		<a href="#"><div class="mark_read">Mark Read</div></a>
+		<div class="reply" id="reply">Reply</div>
+		<div class="delete_msg" id="delete">Delete</div>
+		<div class="mark_read" id="mark_read">Mark Read</div>
 	</div>
 	<div class="white_space"></div>
 	<footer>
@@ -51,5 +53,49 @@
 			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
 		</div>
 	</footer>	
+        <script type="text/javascript" src="cordova.js"></script>
+        <!--script type="text/javascript">
+            app.initialize();
+        </script-->
+		<script>
+			$(document).ready(function(){		
+			$('body').append("<div class='loading'></div>");
+			if ((localStorage.getItem("messagePK") === null)){
+			window.location = 'messages.html';
+			}else{
+				var messagePK = localStorage.getItem("messagePK");
+				localStorage.removeItem("messagePK");
+			var sendData = { "messagePK":messagePK};
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/message.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+							$("#msgr_img").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"'/>");							
+							$("#msg_date").html(data['date']);							
+							$("#msg_by").html("From: "+data['sendername']);							
+							$("#msg").html(data['messagebody']);							
+							$("#msg_single").data('value',data['messagePK']);							
+							$('.loading').remove();
+					}else {
+						$('#msg_list').html('No recieved Messages');
+						$('.loading').remove();						
+					}
+					
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+			}
+			$("#reply").click(function(e){
+				e.preventDefault();
+				localStorage.setItem("messagePK",$("#msg_single").data('value'));
+				window.location = "msg_reply.html";
+			});
+			});
+		</script>
 </body>
 </html>

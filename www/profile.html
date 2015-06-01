@@ -10,6 +10,7 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -26,12 +27,13 @@
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
 			<a href="#"><li>Cookies</li></a>
+			<a href="#" id="logout"><li>Logout</li></a>
 		</ul>
 	</div>
 	<div class="profile_main">
-		<div class="profile_pic"><img src="img/profile_pic.png" /></div>
-		<div class="profile_name">Mark Robinson</div>
-		<div class="profile_des">Hi I am Mark, I drive Jeep</div>
+		<div class="profile_pic" id="profile_pic"></div>
+		<div class="profile_name" id="user_name"></div>
+		<div class="profile_des" id="about_me"></div>
 		<div class="profile_edit">
 			<a href="profile_edit.html"><div class="btn">Edit Profile</div></a>
 			<a href="add_club.html"><div class="btn">Add New Club</div></a>
@@ -40,22 +42,12 @@
 	</div>
 	<div class="profile_trophies">
 		<div class="title">Trophies<span>view all</span></div>
-		<div class="trophy">
-			<img src="img/trophy1.png" />
-			<img src="img/trophy2.png" />
-			<img src="img/trophy3.png" />
-			<img src="img/trophy4.png" />
-			<img src="img/trophy5.png" />
+		<div class="trophy" id="trophy">
 		</div>
 	</div>
 	<div class="profile_trophies">
 		<div class="title">My Friends<span>view all</span><span>Find Friends</span></div>
-		<div class="trophy">
-			<img src="img/profile_frnd1.png" />
-			<img src="img/profile_frnd2.png" />
-			<img src="img/profile_frnd3.png" />
-			<img src="img/profile_frnd4.png" />
-			<img src="img/profile_frnd5.png" />
+		<div class="trophy" id="friends">
 		</div>
 	</div>
 	<div class="white_space"></div>
@@ -68,5 +60,56 @@
 			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
 		</div>
 	</footer>
+        <script type="text/javascript" src="cordova.js"></script>
+        <!--script type="text/javascript">
+            app.initialize();
+        </script-->
+		<script>
+			$(document).ready(function(){		
+			var id = localStorage.getItem("hobby_userID");
+			var sendData = { "id": id};
+			$('body').append("<div class='loading'></div>");
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/profile.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+						$("#user_name").html(data['fname']+" "+ data['lname']);
+						$("#about_me").html(data['aboutme']);
+						$("#profile_pic").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
+						if(data['awards']==0){
+							$("#trophy").html("<div class='empty'>No Awards Yet</div>");
+						}else{
+							var awards = [];
+							for(var i in data['award']){
+								awards.push("<img src='img/"+data['award'][i]+"' />");
+							}
+							$("#trophy").html(awards.join(''));							
+						}
+						if(data['friends']==0){
+							$("#friends").html("<div class='empty'>No Friends Yet</div>");
+						}else{
+							var friends = [];
+							for(var i in data['friend']){
+								if(data['friend'][i]!= null){
+								friends.push("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['friend'][i]+"' />");
+								}else{
+								friends.push("<img src='https://www.myhobbyhive.com/clubuserimages/profile/noimage.png' />");
+								}
+							}
+							$("#friends").html(friends.join(''));							
+						}
+						$('.loading').remove();
+					}
+					
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+			});
+		</script>
 </body>
 </html>

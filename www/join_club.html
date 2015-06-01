@@ -7,9 +7,12 @@
     <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/index.css" />
+	<link rel="stylesheet" href="css/jquery.selectlist.css">
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/jquery.selectlist.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -25,30 +28,28 @@
 			<a href="#"><li>Career</li></a>
 			<a href="#"><li>FAQ's</li></a>
 			<a href="#"><li>Data Use Policy</li></a>
-			<a href="#"><li>Cookies</li></a>
+			<a href="#"><li>Cookies</li></a>			
+			<a href="#" id="logout"><li>Logout</li></a>		
 		</ul>
 	</div>
 	<div class="profile_edit">
-		<label for="name">Find Me:</label>
-		<input type="text" name="name" />
-		<label for="name">Hobby:</label>
-		<select name="name">
-			<option value="1"></option>
-			<option value="2">Option 1</option>
-			<option value="3">Option 2</option>
+	<form name="find_hobby" id="find_hobby" method="POST" action="">
+		<label for="find">Find Me:</label>
+		<input type="text" name="find" />
+		<label for="hobby">Hobby:</label>
+		<select name="hobby" class="hobby" id="hobby">
 		</select>
-		<label for="name">Country:</label>
-		<select name="name">
-			<option value="1"></option>
-			<option value="2">Option 1</option>
-			<option value="3">Option 2</option>
+		<label for="country">Country:</label>
+		<select name="country" id="country" class="hobby">
 		</select>
 		<div class="buttons">
-			<div class="post left">UPDATE</div>
-			<div class="post right">ADD NEW CLUB</div>
+			<div class="post left submit"><input type="submit" name="submit" value="UPDATE"></div>
+			<a href="add_club.html"><div class="post right">ADD NEW CLUB</div></a>
 		</div>
+	</form>
 	</div>
 	<div class="title_big">CLUB DIRECTORY</div>
+	<div id="dir">
 	<div class="club_dir">
 		<div class="club_img"><img src="img/club_img.png" /></div>
 		<div class="club_info">
@@ -56,6 +57,7 @@
 			<div class="club_add">Myhobbyhive Limited</div>
 			<div class="club_add">40 Gracechurch Street London Ec3v 0bt</div>
 		</div>
+	</div>
 	</div>
 	<div class="white_space"></div>
 	<footer>
@@ -67,5 +69,100 @@
 			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
 		</div>
 	</footer>
+		<script>
+			$(document).ready(function(){				
+			$('body').append("<div class='loading'></div>");
+			var id = localStorage.getItem("hobby_userID");
+			sendData = {'id':id};
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/join_club.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+					if(data['success'] == 1){
+						var dir = [];
+						var hobby = [];
+						var country = [];
+						for (var i in data['clubname']){
+						dir.push("	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['logo'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['clubname'][i]+"</div><div class='club_add'>"+data['addressl1'][i]+"</div>			<div class='club_add'>"+data['addressl2'][i]+" "+data['addressl3'][i]+" "+data['postcode'][i]+"</div>		</div>	</div>"); 
+						//alert("nythfhfgh");
+						}			
+						for (var i in data['clubtypeID']){
+							var option_hobby = "<option value="+data['clubtypeID'][i]+" ";
+							if(data['clubtypeID'][i] == data['hobby']){
+								option_hobby += " selected";
+							}
+							option_hobby += ">"+data['hobbyname'][i]+"</option>";
+							hobby.push(option_hobby);
+						}
+						for (var i in data['countryID']){
+							var option_country = "<option value="+data['countryID'][i]+" ";
+							if(data['countryID'][i] == data['country']){
+								option_country += "selected";
+							}
+							option_country += ">"+data['countryname'][i]+"</option>"
+							country.push(option_country);
+						}
+						$("#hobby").html(hobby.join(''));
+						$("#country").html(country.join(''));
+						$("#dir").html(dir.join(''));
+						$('#hobby').selectlist({});
+						$('#country').selectlist({});
+						for (var i in data['clubtypeID']){
+							$("#hobby li[data-value='"+data['clubtypeID'][i]+"']").css('background-image', 'url(https://www.myhobbyhive.com/images/hobbyimages/' +data['imagename'][i]+ ')');
+						}
+						for (var i in data['countryID']){
+							$("#country li[data-value='"+data['countryID'][i]+"']").css('background-image', 'url(https://www.myhobbyhive.com/Images/countryflag/' +data['flag'][i]+ ')');
+						}
+						$("#hobby input[type=button]").css(
+							'background-image',
+							$("#hobby li[data-value="+$("input[name=hobby]").val()+"]").css('background-image')
+						);
+						$("#country input[type=button]").css(
+							'background-image',
+							$("#country li[data-value="+$("input[name=country]").val()+"]").css('background-image')
+						);
+					}else alert(data['message']);
+						$('.loading').remove();					
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+
+
+				$("#find_hobby").on('submit',function(e){
+					e.preventDefault();
+					$('body').append("<div class='loading'></div>");
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/find_hobby.php",
+						data: new FormData(this),
+						dataType: "json",
+						contentType: false,
+						//cache: false,
+						processData:false,
+						success: function(data) {
+							if(data["success"]==1){
+								var updated_hobby = [];
+								for (var i in data['clubname']){
+								updated_hobby.push("	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['logo'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['clubname'][i]+"</div><div class='club_add'>"+data['addressl1'][i]+"</div>			<div class='club_add'>"+data['addressl2'][i]+" "+data['addressl3'][i]+" "+data['postcode'][i]+"</div>		</div>	</div>"); 
+								//alert("nythfhfgh");
+								}			
+								$("#dir").html(updated_hobby.join(''));
+								$('.loading').remove();					
+							} else {
+								$("#dir").html("<div class='empty'>"+data["message"]+"</div>");
+								$('.loading').remove();					
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
+					});
+				});
+
+			});
+		</script>	
 </body>
 </html>		

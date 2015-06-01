@@ -50,8 +50,9 @@ var app = {
 					e.preventDefault();
 					$(".social_share").hide();
 				});
-				$(".msg_short").click(function(e){
+				$("#logout").click(function(e){
 					e.preventDefault();
-					$(this).children(".delete_big").slideToggle();
-				});
+					localStorage.removeItem("hobby_userID");
+					window.location = "login.html";
+				})
 			});

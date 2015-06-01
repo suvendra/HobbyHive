@@ -10,8 +10,8 @@
 		<script src="js/jquery-1.11.2.min.js"></script>
 		<script>
 		$(function () {
-			if (!(localStorage.getItem("hobby_email") === null)&& !(localStorage.getItem("hobby_pass") === null)){
-			window.location = 'userpage.html';
+			if (!(localStorage.getItem("hobby_userID") === null)){
+			window.location = 'social_wall.html';
 		}
 		});
 		</script>
@@ -54,7 +54,7 @@ on my browser.</label></div>
 			$("#sign_up").click(function(e){
 			e.preventDefault();
 			$(this).prop('disabled', true);
-			$('body').prepend("<div class='loading'></div>");
+			$('body').append("<div class='loading'></div>");
 			var s_email = $("#s_email").val();
 			var s_pass = $("#s_pass").val();
 			var sendData = { "email":s_email, "pass":s_pass };
@@ -62,37 +62,35 @@ on my browser.</label></div>
 			if(($("#confirm:checked").length>0)&&($("#s_email").val()!="")&&($("#s_pass").val()!="")){
 			$.ajax({
 				type: "POST",
-				url: "http://dev.myhobbyhive.com/mobileapp/register.php",
+				url: "http://www.mhhdev.com/mobileapp/newdb/register.php",
 				data: sendData,
 				dataType: "json",
 				success: function(data) {
 					if (data['success']=='0'){
 					var response = data['message'];
-					$("#login").prop('disabled', false);
+					$("#sign_up").prop('disabled', false);
 					$('.loading').remove();
 					$("#error").html(response);
 					} else { 
-					localStorage.setItem("hobby_email", s_email);
-					localStorage.setItem("hobby_pass", s_pass);
-						window.location = 'index.html';
+					localStorage.setItem("hobby_userID", data['id']);
+						window.location = 'social_wall.html';
 					}
 				},
 				error: function(data, textStatus, errorThrown) { 
-					$("#login").prop('disabled', false);
-                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
                 } 
 
 			});
 			} else{
 				$("#error").html("Please fill all the data");
-					$("#login").prop('disabled', false);
+					$("#sign_up").prop('disabled', false);
 					$('.loading').remove();
 			}
 			 return false;
 			});
 				$('a').click(function(e){
 					e.preventDefault();
-					$('body').prepend("<div class='loading'></div>");
+					$('body').append("<div class='loading'></div>");
 					window.location = $(this).attr('href');;
 				});			
 		});		
