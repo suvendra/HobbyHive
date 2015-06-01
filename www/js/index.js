@@ -35,7 +35,6 @@ var app = {
 			$(document).ready(function(){
 				$('a').click(function(e){
 					e.preventDefault();
-					$('body').prepend("<div class='loading'></div>");
 					if ($(this).attr('href') != "#"){
 						window.location = $(this).attr('href');
 					}
