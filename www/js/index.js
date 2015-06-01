@@ -36,6 +36,7 @@ var app = {
 				$('a').click(function(e){
 					e.preventDefault();
 					if ($(this).attr('href') != "#"){
+						$('body').prepend("<div class='loading'></div>");
 						window.location = $(this).attr('href');
 					}
 				});
