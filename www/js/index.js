@@ -57,7 +57,7 @@ var app = {
 					localStorage.removeItem("hobby_userID");
 					window.location = "login.html";
 				})
-		document.addEventListener('deviceready', function() {
+		/*document.addEventListener('deviceready', function() {
 			var exitApp = false, intval = setInterval(function (){exitApp = false;}, 1000);
 			document.addEventListener("backbutton", function (e){
 				e.preventDefault();
@@ -70,5 +70,19 @@ var app = {
 					history.back(1);
 				} 
 			}, false);
-		}, false);
-			});
+		}, false);*/
+		    document.addEventListener("backbutton", onBackKeyDown, false);
+			function onBackKeyDown(e) {
+				e.preventDefault();
+				navigator.notification.confirm("Are you sure you want to exit ?", onConfirm, "Confirmation", "Yes,No"); 
+				// Prompt the user with the choice
+			}
+
+			function onConfirm(button) {
+				if(button==2){//If User selected No, then we just do nothing
+					return;
+				}else{
+					navigator.app.exitApp();// Otherwise we quit the app.
+				}
+			}
+		});
