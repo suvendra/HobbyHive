@@ -57,7 +57,7 @@ body {
 }
 .body{
     background-color:#E4E4E4;
-    background-image:url(../img/bg.jpg);
+    background-image:url(../img/bg1.jpg);
     background-attachment:fixed;
 }
 .logo_home {
@@ -179,6 +179,7 @@ input[type="email"], input[type="password"] {
   border: 1px solid #ffa200;
   padding: 10px;
   margin: 4px auto;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .sign_up_button {
   width: 290px;
@@ -192,9 +193,9 @@ input[type="email"], input[type="password"] {
   color: white;
   cursor:pointer;
 }
-.sign_up_btn{
-  background: url(../img/signup_button2.png) center center no-repeat;
-  background-size:100% 100%;
+.sign_up_btn {
+  background: #4f4c4c;
+  background-size: 100% 100%;
 }
 .logout{
   background: url(../img/signup_button.png) center center no-repeat;
@@ -207,8 +208,8 @@ input[type="email"], input[type="password"] {
   border-radius: 5px;
   border: 0px;
   padding: 10px;
-  margin: 100px auto 40px;
-  background: #ffa200;
+  margin: 20px auto 40px;
+  background: #4f4c4c;
   color: white;
   cursor: pointer;
 }
@@ -259,7 +260,7 @@ input[type="email"], input[type="password"] {
   padding: 15px 0px;
 }
 .login_white {
-  background: white;
+/*  background: white;*/
   min-height: 400px;
 }
 .loading {
@@ -911,3 +912,22 @@ input[type="email"], input[type="password"] {
   height: 65px;
 }
 /************* Footer Links ********************/
+.access_footer {
+  width: 100%;
+  background: linear-gradient(#ffd65e, #febf04);
+  position: fixed;
+  bottom: 0px;
+}
+.access_link {
+  display: inline-block;
+  width: 50%;
+  padding: 10px 0px;
+  font-size: 14px;
+  font-family: "Roboto-bold";
+  text-transform: uppercase;
+  cursor:pointer;
+}
+.access_selected {
+  background-color: white;
+  box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
