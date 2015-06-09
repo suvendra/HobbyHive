@@ -914,6 +914,10 @@ input[type="email"], input[type="password"] {
 /************* Footer Links ********************/
 .access_footer {
   width: 100%;
+  background: -webkit-linear-gradient(#ffd65e, #febf04);
+  background: -moz-linear-gradient(#ffd65e, #febf04);
+  background: -ms-linear-gradient(#ffd65e, #febf04);
+  background: -o-linear-gradient(#ffd65e, #febf04);
   background: linear-gradient(#ffd65e, #febf04);
   position: fixed;
   bottom: 0px;
