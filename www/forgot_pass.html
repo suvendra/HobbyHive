@@ -22,25 +22,21 @@
         <div class="app">
 			<div class="logo_home"><img src="img/logo_new.png" /></div>
 			<div class="login_white">
-				<h2>Club user account</h2>
+				<h2>Enter your Email to receive Password</h2>
 				<form class="login_form" id="login_form">
 					<div id="error"></div>
 					<div class="input"><input type="email" id="email" name="email" placeholder="Email" required/></div>
-					<div class="input"><input type="password" id="pass" name="pass" placeholder="Password" required/></div>
-					<div class="checkbox">
-						<div class="forgot_pass"><a href="forgot_pass.html">Forgot Password?</a></div>
-					</div>
-					<div class="input"><input type="submit" id="login" class="login" name="submit" value="SUBMIT" /></div>
+					<div class="input"><input type="submit" id="reset_pass" class="login" name="submit" value="SEND PASSWORD" /></div>
 				</form>
 			</div>
 		<div class="access_footer">
 			<a href="register.html"><div class="access_link">
 				<img src="img/register.png" />
 				<div class="name">Register</div>
-			</div></a><div class="access_link access_selected">
+			</div></a><a href="login.html"><div class="access_link access_selected">
 				<img src="img/login.png" />
 				<div class="name">Login</div>
-			</div>
+			</div></a>
 		</div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
@@ -49,38 +45,28 @@
         </script>
 		<script>
 		$(document).ready(function(){
-			document.addEventListener("backbutton", function(e){
-				e.preventDefault();
-				window.location = 'index.html';
-			});
 		
-			$("#login").click(function(e){
+			$("#reset_pass").click(function(e){
 			e.preventDefault();
 			$(this).prop('disabled', true);
 			$('body').append("<div class='loading'></div>");
 			var email = $("#email").val();
-			var pass = $("#pass").val();
-			var sendData = { "email":email, "pass":pass };
+			var sendData = { "email":email };
 
-			if(($("#email").val()!="")&&($("#pass").val()!="")){
+			if($("#email").val()!=""){
 			$.ajax({
 				type: "POST",
-				url: "http://www.mhhdev.com/mobileapp/newdb/logincheck.php",
+				url: "http://www.mhhdev.com/mobileapp/newdb/forgotpass.php",
 				data: sendData,
 				dataType: "json",
 				success: function(data) {
-					if (data['success']=='0'){
-					var response = data['message'];
-					$("#login").prop('disabled', false);
-					$('.loading').remove();
-					$("#error").html(response);
-					} else { 
-					localStorage.setItem("hobby_userID", data['id']);
-						if(data['isactive'] == 1){
-							window.location = 'social_wall.html';
-						} else {
-							window.location = 'info_form.html';
-						}
+					if(data['success'] == 1){
+						window.location = 'login.html';
+					}else{
+						var response = data['message'];
+						$("#reset_pass").prop('disabled', false);
+						$('.loading').remove();
+						$("#error").html(response);
 					}
 				},
 				error: function(data, textStatus, errorThrown) { 
@@ -90,7 +76,7 @@
 			});
 			} else{
 				$("#error").html("Please fill all the data");
-					$("#login").prop('disabled', false);
+					$("#reset_pass").prop('disabled', false);
 					$('.loading').remove();
 			}
 			 return false;

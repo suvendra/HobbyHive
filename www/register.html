@@ -63,7 +63,7 @@
 			var s_pass = $("#s_pass").val();
 			var sendData = { "email":s_email, "pass":s_pass };
 
-			if(($("#confirm:checked").length>0)&&($("#s_email").val()!="")&&($("#s_pass").val()!="")){
+			if(($("#s_email").val()!="")&&($("#s_pass").val()!="")){
 			$.ajax({
 				type: "POST",
 				url: "http://www.mhhdev.com/mobileapp/newdb/register.php",
@@ -77,7 +77,7 @@
 					$("#error").html(response);
 					} else { 
 					localStorage.setItem("hobby_userID", data['id']);
-						window.location = 'social_wall.html';
+						window.location = 'info_form.html';
 					}
 				},
 				error: function(data, textStatus, errorThrown) { 
