@@ -38,12 +38,12 @@
 		<input type="text" id="name" name="name" placeholder="" />
 		<label for="about_us">Tell us about yourself:</label>
 		<textarea class="status" id="about_you" name="about_you" placeholder=""></textarea>
-		<label for="upload_img">Tell us about yourself:</label>
-		<div class="edit_img">
+		<!--label for="upload_img">Tell us about yourself:</label-->
+		<!--div class="edit_img">
 			<div class="original_img" id="original_img"></div>
 			<div class="upload_img"><input type="file" name="upload_img" id="upload_img"/>Upload Profile Image</div>
 			<div class="allowed_img">(Only jpg, jpeg, gif format, upto 2MB size)</div>
-		</div>
+		</div-->
 		<div class="post right submit" id="update_info"><input type="submit" value="Update"/></div>
 	</form>
 	</div>
@@ -84,9 +84,9 @@
 				dataType: "json",
 				success: function(data) {
 					if(data['success'] == 1){
-						$("#name").attr("placeholder",data['fname']+" "+ data['lname']);
+						$("#name").attr("placeholder",data['fname']);
 						$("#about_you").attr("placeholder",data['aboutme']);
-						$("#original_img").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
+						//$("#original_img").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
 						$('.loading').remove();
 					}
 					
@@ -96,7 +96,7 @@
                 } 
 				});
 			
-				$("#upload_img").change(function() {
+/*				$("#upload_img").change(function() {
 				var file = this.files[0];
 				var imagefile = file.type;
 				var match= ["image/jpeg","image/png","image/jpg"];
@@ -115,9 +115,13 @@
 				function imageIsLoaded(e) {
 				$(".upload_img").css("color","green");
 				$('#original_img img').attr('src', e.target.result);
-				};
+				};*/
 				$("#profile_form").on('submit',function(e){
 					e.preventDefault();
+					if($("#name").val()==""){
+						$("#error").html("Name is required");
+						return;
+					}
 					$('body').append("<div class='loading'></div>");
 					var formdata = new FormData(this);
 					var id = localStorage.getItem("hobby_userID");

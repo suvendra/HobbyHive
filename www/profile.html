@@ -41,13 +41,18 @@
 		</div>
 	</div>
 	<div class="profile_trophies">
-		<div class="title">Trophies<span>view all</span></div>
+		<div class="title">My Friends<span>view all</span><span>Find Friends</span></div>
+		<div class="trophy" id="friends">
+		</div>
+	</div>
+	<div class="profile_trophies">
+		<div class="title">My Photos<span>view all</span></div>
 		<div class="trophy" id="trophy">
 		</div>
 	</div>
 	<div class="profile_trophies">
-		<div class="title">My Friends<span>view all</span><span>Find Friends</span></div>
-		<div class="trophy" id="friends">
+		<div class="title">My Kit<span>view all</span></div>
+		<div class="trophy" id="kit">
 		</div>
 	</div>
 	<div class="white_space"></div>
@@ -76,17 +81,34 @@
 				dataType: "json",
 				success: function(data) {
 					if(data['success'] == 1){
-						$("#user_name").html(data['fname']+" "+ data['lname']);
+						if((data['fname'] == "")||(data['fname'] == null)||(data['fname'] == 'undefined')){
+						$("#user_name").html('');
+						}else{
+						$("#user_name").html(data['fname']);
+						}
+						if((data['aboutme'] == "")||(data['aboutme'] == null)||(data['aboutme'] == 'undefined')){
+						$("#about_me").html('');
+						}else{
 						$("#about_me").html(data['aboutme']);
+						}
 						$("#profile_pic").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
 						if(data['awards']==0){
 							$("#trophy").html("<div class='empty'>No Awards Yet</div>");
 						}else{
 							var awards = [];
 							for(var i in data['award']){
-								awards.push("<img src='img/"+data['award'][i]+"' />");
+								awards.push("<img src='https://www.myhobbyhive.com/Images/users/album/full/"+data['award'][i]+"?width=54&height=54&mode=crop' />");
 							}
 							$("#trophy").html(awards.join(''));							
+						}
+						if(data['kits']==0){
+							$("#kit").html("<div class='empty'>No Kit</div>");
+						}else{
+							var kits = [];
+							for(var i in data['kit']){
+								kits.push("<img src='https://www.myhobbyhive.com/Images/assets/list/"+data['kit'][i]+"?width=54&height=54&mode=crop' />");
+							}
+							$("#kit").html(kits.join(''));							
 						}
 						if(data['friends']==0){
 							$("#friends").html("<div class='empty'>No Friends Yet</div>");

@@ -13,7 +13,7 @@
 		<script>
 		$(function () {
 			if (!(localStorage.getItem("hobby_userID") === null)){
-			window.location = 'social_wall.html';
+			window.location = 'profile.html';
 		}
 		});
 		</script>
@@ -77,7 +77,7 @@
 					} else { 
 					localStorage.setItem("hobby_userID", data['id']);
 						if(data['isactive'] == 1){
-							window.location = 'social_wall.html';
+							window.location = 'profile.html';
 						} else {
 							window.location = 'info_form.html';
 						}

@@ -35,6 +35,8 @@
 	<div class="profile_edit">
 	<form name="user_register" id="user_register" method="POST" action="">
 		<div id="error"></div>
+		<label for="name">Name</label>
+		<input type="text" name="name" class="input"/>
 		<label for="hobby">Hobby:</label>
 		<select name="hobby" class="hobby" id="hobby">
 			<option value="1"></option>
@@ -47,21 +49,21 @@
 			<option value="2">Option 1</option>
 			<option value="3">Option 2</option>
 		</select>
-		<label for="about_you">About Me:</label>
-		<textarea class="status" name="about_me"></textarea>
-		<div class = "upload_logo_container">
+		<!--label for="about_you">About Me:</label>
+		<textarea class="status" name="about_me"></textarea-->
+		<!--div class = "upload_logo_container">
 			<label for="name">Profile Image:</label><br />
 			<div id="logo_preview"><img src="https://www.myhobbyhive.com/clubuserimages/profile/noimage.png" /></div>
 			<input type="file" name="profile_img" id="club_logo" style="display:none" />
 			<div class="add_more" id="add_more"></div>
-		</div>
-		<div class="post submit"><input type="submit" name="submit" value="SUBMIT" /></div>
+		</div-->
+		<div class="submit"><input type="submit" class="login" name="submit" value="SUBMIT" /></div>
 	</form>
 	</div>
 		<script>
 			$(document).ready(function(){				
 			$('body').append("<div class='loading'></div>");
-			$("#add_more").click(function(){
+			/*$("#add_more").click(function(){
 				$("#club_logo").click();
 			});
 			$("#club_logo").change(function() {
@@ -82,7 +84,7 @@
 			});
 			function imageIsLoaded(e) {
 			$('#logo_preview img').attr('src', e.target.result);
-			};
+			};*/
 			var id = localStorage.getItem("hobby_userID");
 			sendData = {'id':id};
 			$.ajax({
@@ -94,8 +96,10 @@
 					if(data['success'] == 1){
 						var hobby = [];
 						var country = [];
-						var option_hobby;
-						var option_country;
+						var option_hobby = "<option value='0'>-- Select Hobby --</option>";
+						var option_country = "<option value='0'>-- Select Country --</option>";
+						hobby.push(option_hobby);
+						country.push(option_country);
 						for (var i in data['clubtypeID']){
 							var option_hobby = "<option value="+data['clubtypeID'][i]+" ";
 							if(data['clubtypeID'][i] == data['hobby']){
@@ -144,6 +148,18 @@
 
 				$("#user_register").on('submit',function(e){
 					e.preventDefault();
+				if($("input[name=name]").val()==""){
+					$("#error").html("Write your Name");
+					return;
+				}
+				if($("input[name=hobby]").val()=="0"){
+					$("#error").html("Select A Hobby");
+					return;
+				}
+				if($("input[name=country]").val()=="0"){
+					$("#error").html("Select your Country");
+					return;
+				}
 					$('body').append("<div class='loading'></div>");
 					var id = localStorage.getItem("hobby_userID");
 					var formdata = new FormData(this);
@@ -158,7 +174,7 @@
 						processData:false,
 						success: function(data) {
 							if(data["success"]==1){
-								window.location = "social_wall.html"
+								window.location = "profile.html"
 								$('.loading').remove();					
 							} else {
 								$("#error").html(data["message"]);
