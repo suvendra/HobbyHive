@@ -165,7 +165,7 @@
 					$(".error").remove();
 					if(($('input[name=name]').val() == "") && ($('textarea[name=about_club]').val() == "")){
 						$("label[for=name]").append("<span class='error'>Club name is required</span>");
-						$("label[for=about_club]").append("<span class='error'>This feild is required</span>");
+						$("label[for=about_club]").append("<span class='error'>Write about your club</span>");
 						return;
 					}
 					if($('input[name=name]').val() == ""){
@@ -173,7 +173,7 @@
 						return;
 					}
 					if($('textarea[name=about_club]').val() == ""){
-						$("label[for=about_club]").append("<span class='error'>This feild is required</span>");
+						$("label[for=about_club]").append("<span class='error'>Write about your club</span>");
 						return;
 					}
 					$('body').append("<div class='loading'></div>");

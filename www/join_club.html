@@ -211,7 +211,7 @@
 						//processData:false,
 						success: function(data) {
 							if(data['success'] == 1){
-								$(".join_club[data-id='"+data['clubID']+"']").html("Request Send");
+								$(".join_club[data-id='"+data['clubID']+"']").html("Request Sent");
 								$(".loading").remove();
 							}else{
 								$("#error").html(data['message']);
