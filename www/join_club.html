@@ -201,7 +201,6 @@
 					var clubID = $(this).data('id');
 					$('body').append("<div class='loading'></div>");
 					var sendData = {"clubID":clubID, "id":id};
-					alert(id+","+clubID);
 					$.ajax({
 						type: "POST",
 						url: "http://localhost/hobbyhiveapp/newdb/send_club_request.php",
