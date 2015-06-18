@@ -865,6 +865,7 @@ input[type="email"], input[type="password"] {
   bottom: 0px;
   box-shadow: 0px 0px 25px 10px white;
   text-align: center;
+  left: 0px;
 }
 .links>a>div {
   display: inline-block;
