@@ -18,7 +18,7 @@
 <body>
 	<header class="header">
 		<div class="logo_prm"><img src="img/logo_small.png" /></div>
-		<div class="page_title">Profile</div>
+		<div class="page_title">Add New Club</div>
 		<div class="menu" id="menu"></div>
 	</header>
 	<div class="menu_container">
@@ -33,16 +33,14 @@
 		</ul>
 	</div>
 	<div class="circle">
-		<div class="green">Register</div>
-		<div class="yellow">profile</div>
+		<div class="yellow">Register</div>
 		<div class="black">address</div>
 		<div class="black">social</div>
-		<div class="black">members</div>
 	</div>
 	<div class="profile_edit">
 	<form name="club_register" id="club_register" method="POST" action="">
 		<div id="error"></div>
-		<label for="name">Club Name:</label>
+		<label for="name">Club Name:<span style='color:red'>*</span></label>
 		<input type="text" name="name" placeholder="" />
 		<label for="hobby">Club Hobby:</label>
 		<select name="hobby" class="hobby" id="hobby">
@@ -56,14 +54,14 @@
 			<option value="2">Option 1</option>
 			<option value="3">Option 2</option>
 		</select>
-		<label for="about_club">About Club:</label>
+		<label for="about_club">About Club:<span style='color:red'>*</span></label>
 		<textarea class="status" name="about_club"></textarea>
-		<div class = "upload_logo_container">
+		<!--div class = "upload_logo_container">
 			<label for="name">Club Logo:</label><br />
 			<div id="logo_preview"><img src="https://www.myhobbyhive.com/clubuserimages/profile/noimage.png" /></div>
 			<input type="file" name="club_logo" id="club_logo" class="club_country" style="display:none" />
 			<div class="add_more" id="add_more"></div>
-		</div>
+		</div-->
 		<div class="post submit"><input type="submit" name="submit" value="NEXT >" /></div>
 	</form>
 	</div>
@@ -71,16 +69,16 @@
 	<footer>
 		<div class="links">
 			<a href="social_wall.html"><div class="social_wall">Social Wall</div></a>
-			<a href="profile.html"><div class="profile selected">Profile</div></a>
+			<a href="profile.html"><div class="profile">Profile</div></a>
 			<a href="messages.html"><div class="messages">Messages</div></a>
 			<a href="diary.html"><div class="diary">Diary</div></a>
-			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
+			<a href="join_club.html"><div class="hobby_link selected">Club Stuff</div></a>
 		</div>
 	</footer>
 		<script>
 			$(document).ready(function(){				
 			$('body').append("<div class='loading'></div>");
-			$("#add_more").click(function(){
+			/*$("#add_more").click(function(){
 				$("#club_logo").click();
 			});
 			$("#club_logo").change(function() {
@@ -102,7 +100,7 @@
 			function imageIsLoaded(e) {
 			$('#logo_preview img').attr('src', e.target.result);
 			};
-			
+			*/
 			var id = localStorage.getItem("hobby_userID");
 			sendData = {'id':id};
 			$.ajax({
@@ -164,6 +162,20 @@
 
 				$("#club_register").on('submit',function(e){
 					e.preventDefault();
+					$(".error").remove();
+					if(($('input[name=name]').val() == "") && ($('textarea[name=about_club]').val() == "")){
+						$("label[for=name]").append("<span class='error'>Club name is required</span>");
+						$("label[for=about_club]").append("<span class='error'>This feild is required</span>");
+						return;
+					}
+					if($('input[name=name]').val() == ""){
+						$("label[for=name]").append("<span class='error'>Club name is required</span>");
+						return;
+					}
+					if($('textarea[name=about_club]').val() == ""){
+						$("label[for=about_club]").append("<span class='error'>This feild is required</span>");
+						return;
+					}
 					$('body').append("<div class='loading'></div>");
 					var formdata = new FormData(this);
 					var id = localStorage.getItem("hobby_userID");

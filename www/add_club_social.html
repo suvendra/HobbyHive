@@ -34,17 +34,15 @@
 	</div>
 	<div class="circle">
 		<div class="green">Register</div>
-		<div class="yellow">profile</div>
-		<div class="black">address</div>
-		<div class="black">social</div>
-		<div class="black">members</div>
+		<div class="green">address</div>
+		<div class="yellow">social</div>
 	</div>
 	<div class="profile_edit">
 	<form name="club_social" id="club_social" method="POST" action="">
 		<div id="error"></div>
-		<label for="name">myHobbyHive Site :</label>
+		<label for="site">myHobbyHive Site :<span style="color:red">*</span></label>
 		<input type="text" name="site" placeholder="https://myhobbyhive.com/" />
-		<label for="name">Club Facebook URL :</label>
+		<label for="facebook">Club Facebook URL :</label>
 		<input type="text" name="facebook" placeholder="" />
 		<label for="name">Club Twitter URL :</label>
 		<input type="text" name="twitter" placeholder="" />
@@ -59,10 +57,10 @@
 	<footer>
 		<div class="links">
 			<a href="social_wall.html"><div class="social_wall">Social Wall</div></a>
-			<a href="profile.html"><div class="profile selected">Profile</div></a>
+			<a href="profile.html"><div class="profile">Profile</div></a>
 			<a href="messages.html"><div class="messages">Messages</div></a>
 			<a href="diary.html"><div class="diary">Diary</div></a>
-			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
+			<a href="join_club.html"><div class="hobby_link selected">Club Stuff</div></a>
 		</div>
 	</footer>
 		<script>
@@ -71,6 +69,11 @@
 			localStorage.removeItem("hobby_newclubID");
 				$("#club_social").on('submit',function(e){
 					e.preventDefault();
+					$(".error").remove();
+					if($("input[name=site]").val()==""){
+						$("label[for=site]").append("<span class='error'>Club Website is required</span>");
+						return;
+					}
 					$('body').append("<div class='loading'></div>");
 					var formdata = new FormData(this);
 					formdata.append('hobby_newclubID',hobby_newclubID);

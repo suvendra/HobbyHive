@@ -18,7 +18,7 @@
 <body>
 	<header class="header">
 		<div class="logo_prm"><img src="img/logo_small.png" /></div>
-		<div class="page_title">Profile</div>
+		<div class="page_title">Club Address</div>
 		<div class="menu" id="menu"></div>
 	</header>
 	<div class="menu_container">
@@ -34,15 +34,13 @@
 	</div>
 	<div class="circle">
 		<div class="green">Register</div>
-		<div class="yellow">profile</div>
-		<div class="black">address</div>
+		<div class="yellow">address</div>
 		<div class="black">social</div>
-		<div class="black">members</div>
 	</div>
 	<div class="profile_edit">
 	<form name="club_profile" id="club_profile" method="POST" action="">
 		<div id="error"></div>
-		<label for="name">Club Address :</label>
+		<label for="address1">Club Address :<span style="color:red">*</span></label>
 		<input type="text" name="address1" placeholder="" />
 		<input type="text" name="address2" placeholder="" />
 		<label for="name">Postcode :</label>
@@ -51,7 +49,7 @@
 		<input type="text" name="telephone" placeholder="" />
 		<label for="name">Club Website:</label>
 		<input type="text" name="website" placeholder="" />
-		<label for="name">Club Email:</label>
+		<label for="club_email">Club Email:<span style="color:red">*</span></label>
 		<input type="text" name="club_email" placeholder="" />
 		<div class="post submit"><input type="submit" name="submit" value="NEXT >" /></div>
 	</form>
@@ -60,10 +58,10 @@
 	<footer>
 		<div class="links">
 			<a href="social_wall.html"><div class="social_wall">Social Wall</div></a>
-			<a href="profile.html"><div class="profile selected">Profile</div></a>
+			<a href="profile.html"><div class="profile">Profile</div></a>
 			<a href="messages.html"><div class="messages">Messages</div></a>
 			<a href="diary.html"><div class="diary">Diary</div></a>
-			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
+			<a href="join_club.html"><div class="hobby_link selected">Club Stuff</div></a>
 		</div>
 	</footer>
 		<script>
@@ -72,6 +70,33 @@
 			localStorage.removeItem("hobby_newclubID");
 				$("#club_profile").on('submit',function(e){
 					e.preventDefault();
+					$(".error").remove();
+					var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+					if(($("input[name=address1]").val() == "") && ($("input[name=club_email]").val() == "")){
+						$("label[for=address1]").append("<span class='error'>Adress is required</span>");
+						$("label[for=club_email]").append("<span class='error'>Club email is required</span>");
+						return;
+					}
+					if($("input[name=address1]").val() == ""){
+						$("label[for=address1]").append("<span class='error'>Adress is required</span>");
+						var email = $("input[name=club_email]").val();
+						if(!re.test(email)){
+							$("label[for=club_email]").append("<span class='error'>Email is not valid</span>");							
+							return
+						}
+						return;
+					}
+					if($("input[name=club_email]").val() == ""){
+						$("label[for=club_email]").append("<span class='error'>Club email is required</span>");
+						return;
+					}else{
+						var email = $("input[name=club_email]").val();
+						if(!re.test(email)){
+							$("label[for=club_email]").append("<span class='error'>Email is not valid</span>");							
+							return
+						}
+					}
+					
 					$('body').append("<div class='loading'></div>");
 					var formdata = new FormData(this);
 					formdata.append('hobby_newclubID',hobby_newclubID);
@@ -87,7 +112,6 @@
 							if(data["success"]==1){
 								localStorage.setItem("hobby_newclubID", data["hobby_newclubID"]);
 								window.location = "add_club_social.html"
-								$('.loading').remove();					
 							} else {
 								localStorage.setItem("hobby_newclubID", data["hobby_newclubID"]);
 								$("#error").html(data["message"]);

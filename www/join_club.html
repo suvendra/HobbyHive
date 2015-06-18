@@ -33,8 +33,9 @@
 		</ul>
 	</div>
 	<div class="profile_edit">
+	<div id="error"></div>
 	<form name="find_hobby" id="find_hobby" method="POST" action="">
-		<label for="find">Find Me:</label>
+		<label for="find">Club Name:</label>
 		<input type="text" name="find" />
 		<label for="hobby">Hobby:</label>
 		<select name="hobby" class="hobby" id="hobby">
@@ -43,7 +44,7 @@
 		<select name="country" id="country" class="hobby">
 		</select>
 		<div class="buttons">
-			<div class="post left submit"><input type="submit" name="submit" value="UPDATE"></div>
+			<div class="post left submit"><input type="submit" name="submit" value="FIND"></div>
 			<a href="add_club.html"><div class="post right">ADD NEW CLUB</div></a>
 		</div>
 	</form>
@@ -63,10 +64,10 @@
 	<footer>
 		<div class="links">
 			<a href="social_wall.html"><div class="social_wall">Social Wall</div></a>
-			<a href="profile.html"><div class="profile selected">Profile</div></a>
+			<a href="profile.html"><div class="profile">Profile</div></a>
 			<a href="messages.html"><div class="messages">Messages</div></a>
 			<a href="diary.html"><div class="diary">Diary</div></a>
-			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
+			<a href="join_club.html"><div class="hobby_link selected">Club Stuff</div></a>
 		</div>
 	</footer>
 		<script>
@@ -85,7 +86,25 @@
 						var hobby = [];
 						var country = [];
 						for (var i in data['clubname']){
-						dir.push("	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['logo'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['clubname'][i]+"</div><div class='club_add'>"+data['addressl1'][i]+"</div>			<div class='club_add'>"+data['addressl2'][i]+" "+data['addressl3'][i]+" "+data['postcode'][i]+"</div>		</div>	</div>"); 
+								if((data['clubname'][i] == null)||(data['clubname'][i] == 'undefined')){
+									data['clubname'][i] = "";
+								}
+								if((data['addressl1'][i] == null)||(data['addressl1'][i] == 'undefined')){
+									data['addressl1'][i] = "";
+								}
+								if((data['addressl2'][i] == null)||(data['addressl2'][i] == 'undefined')){
+									data['addressl2'][i] = "";
+								}
+								if((data['postcode'][i] == null)||(data['postcode'][i] == 'undefined')){
+									data['postcode'][i] = "";
+								}
+						var divs = "	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['logo'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['clubname'][i]+"</div><div class='club_add'>"+data['addressl1'][i]+"</div>			<div class='club_add'>"+data['addressl2'][i]+" "+data['postcode'][i]+"</div>		</div>";
+						if(data['isadmin'][i] == "0"){
+						divs +=	"<div class='post right join_club' data-id='"+data['clubID'][i]+"'>Send Join Request</div>	</div>";
+						}else{
+						divs +="</div>";
+						}
+						dir.push(divs);
 						//alert("nythfhfgh");
 						}			
 						for (var i in data['clubtypeID']){
@@ -147,8 +166,25 @@
 							if(data["success"]==1){
 								var updated_hobby = [];
 								for (var i in data['clubname']){
-								updated_hobby.push("	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['logo'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['clubname'][i]+"</div><div class='club_add'>"+data['addressl1'][i]+"</div>			<div class='club_add'>"+data['addressl2'][i]+" "+data['addressl3'][i]+" "+data['postcode'][i]+"</div>		</div>	</div>"); 
-								//alert("nythfhfgh");
+								if((data['clubname'][i] == null)||(data['clubname'][i] == 'undefined')){
+									data['clubname'][i] = "";
+								}
+								if((data['addressl1'][i] == null)||(data['addressl1'][i] == 'undefined')){
+									data['addressl1'][i] = "";
+								}
+								if((data['addressl2'][i] == null)||(data['addressl2'][i] == 'undefined')){
+									data['addressl2'][i] = "";
+								}
+								if((data['postcode'][i] == null)||(data['postcode'][i] == 'undefined')){
+									data['postcode'][i] = "";
+								}
+								var divs = "	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['logo'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['clubname'][i]+"</div><div class='club_add'>"+data['addressl1'][i]+"</div>			<div class='club_add'>"+data['addressl2'][i]+" "+data['postcode'][i]+"</div>		</div></div>"; 
+								if(data['isadmin'][i] == "0"){
+								divs +=	"<div class='post right join_club' data-id='"+data['clubID'][i]+"'>Send Join Request</div>	</div>";
+								}else{
+								divs +="</div>";
+								}
+								updated_hobby.push(divs);
 								}			
 								$("#dir").html(updated_hobby.join(''));
 								$('.loading').remove();					
@@ -160,6 +196,36 @@
 						error: function(data, textStatus, errorThrown) { 
 							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
 					});
+				});
+				$(document).on('click','.join_club',function(e){
+					var clubID = $(this).data('id');
+					$('body').append("<div class='loading'></div>");
+					var sendData = {"clubID":clubID, "id":id};
+					alert(id+","+clubID);
+					$.ajax({
+						type: "POST",
+						url: "http://localhost/hobbyhiveapp/newdb/send_club_request.php",
+						data: sendData,
+						dataType: "json",
+						//contentType: false,
+						//cache: false,
+						//processData:false,
+						success: function(data) {
+							if(data['success'] == 1){
+								$(".join_club[data-id='"+data['clubID']+"']").html("Request Send");
+								$(".loading").remove();
+							}else{
+								$("#error").html(data['message']);
+								$(".loading").remove();
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							//alert(textStatus+", error:"+errorThrown);
+							$('#error').append("Unable to connect to internet");	
+							$(".loading").remove();
+						} 
+					});
+					
 				});
 
 			});

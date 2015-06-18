@@ -34,7 +34,7 @@
 	<div class="profile_edit">
 	<form class="profile_form" id="profile_form" method="post" action="" enctype="multipart/form-data">
 		<div id="error"></div>
-		<label for="name">Name:</label>
+		<label for="name">Name:<span style="color:red">*</span></label>
 		<input type="text" id="name" name="name" placeholder="" />
 		<label for="about_us">Tell us about yourself:</label>
 		<textarea class="status" id="about_you" name="about_you" placeholder=""></textarea>
@@ -51,9 +51,9 @@
 	<div class="profile_edit">
 	<form name="pass_reset" id="pass_reset" method="POST" action="" enctype="multipart/form-data">
 		<div id="error2"></div>
-		<label for="password">New Password:</label>
+		<label for="password">New Password:<span style="color:red">*</span></label>
 		<input type="password" name="pass" id="pass" />
-		<label for="confirm_pass">Confirm Password:</label>
+		<label for="confirm_pass">Confirm Password:<span style="color:red">*</span></label>
 		<input type="password" name="confirm_pass" id="confirm_pass"/>
 		<div class="post right submit"><input type="submit" name="submit" value="Update" /></div>
 	</form>
@@ -65,7 +65,7 @@
 			<a href="profile.html"><div class="profile selected">Profile</div></a>
 			<a href="messages.html"><div class="messages">Messages</div></a>
 			<a href="diary.html"><div class="diary">Diary</div></a>
-			<a href="hobbies.html"><div class="hobby_link">Find a Hobby</div></a>
+			<a href="join_club.html"><div class="hobby_link">Club Stuff</div></a>
 		</div>
 	</footer>
         <script type="text/javascript" src="cordova.js"></script>
@@ -84,7 +84,7 @@
 				dataType: "json",
 				success: function(data) {
 					if(data['success'] == 1){
-						$("#name").attr("placeholder",data['fname']);
+						$("#name").val(data['fname']);
 						$("#about_you").attr("placeholder",data['aboutme']);
 						//$("#original_img").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
 						$('.loading').remove();
@@ -118,8 +118,9 @@
 				};*/
 				$("#profile_form").on('submit',function(e){
 					e.preventDefault();
-					if($("#name").val()==""){
-						$("#error").html("Name is required");
+					$(".error").remove();					
+					if(($("#name").val()=="")){
+						$("label[for=name]").append("<span class='error'>Name is required</span>");
 						return;
 					}
 					$('body').append("<div class='loading'></div>");
@@ -151,6 +152,20 @@
 
 				$("#pass_reset").on('submit',function(e){
 					e.preventDefault();
+					$(".error").remove();					
+					if(($("input[name=pass]").val()=="")){
+						$("label[for=password]").append("<span class='error'>Enter New Password to change</span>");
+						return;
+					}
+					if(($("input[name=confirm_pass]").val()=="")){
+						$("label[for=confirm_pass]").append("<span class='error'>Re-Enter you password</span>");
+						return;						
+					}else{
+						if($("input[name=confirm_pass]").val() != $("input[name=pass]").val()){
+							$("label[for=confirm_pass]").append("<span class='error'>Password Do not match</span>");
+							return;													
+						}
+					}
 					$('body').append("<div class='loading'></div>");
 					//var passform = new FormData(this);
 					var pass = $('#pass').val();

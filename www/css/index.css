@@ -738,6 +738,7 @@ input[type="email"], input[type="password"] {
   margin: 10px 0px;
   text-align: center;
   background: url(../img/line_through.png) center center no-repeat;
+  background-size: 170px;
 }
 .circle>div {
   width: 58px;
@@ -777,6 +778,7 @@ input[type="email"], input[type="password"] {
 .club_dir {
   padding: 20px;
   border-bottom: 1px solid rgba(36, 36, 36, 0.2);
+  overflow: hidden;
 }
 .club_img {
   float: left;
@@ -935,4 +937,8 @@ input[type="email"], input[type="password"] {
 .access_selected {
   background-color: white;
   box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+.error {
+  color: red;
+  margin-left: 10px;
 }
