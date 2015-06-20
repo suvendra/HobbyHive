@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+	<link rel="stylesheet" href="css/jquery.selectlist.css">
+	<script src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/jquery.selectlist.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
+    <title>My Hobby Hive</title>
+</head>
+<body>
+	<header class="header">
+		<div class="logo_prm"><img src="img/logo_small.png" /></div>
+		<div class="page_title">Find Friends</div>
+		<div class="menu" id="menu"></div>
+	</header>
+	<div class="menu_container">
+		<ul class="menu_item">
+			<a href="#"><li>About Us</li></a>
+			<a href="#"><li>Tell a Friend</li></a>
+			<a href="#"><li>Career</li></a>
+			<a href="#"><li>FAQ's</li></a>
+			<a href="#"><li>Data Use Policy</li></a>
+			<a href="#"><li>Cookies</li></a>			
+			<a href="#" id="logout"><li>Logout</li></a>		
+		</ul>
+	</div>
+	<div class="profile_edit">
+	<div id="error"></div>
+	<form name="find_friend" id="find_friend" method="POST" action="">
+		<label for="find">Name:</label>
+		<input type="text" name="find" />
+		<label for="hobby">Hobby:</label>
+		<select name="hobby" class="hobby" id="hobby">
+		</select>
+		<label for="country">Country:</label>
+		<select name="country" id="country" class="hobby">
+		</select>
+		<div class="buttons">
+			<div class="post left submit"><input type="submit" name="submit" value="FIND"></div>
+		</div>
+	</form>
+	</div>
+	<div class="title_big">MEMBERS LIST</div>
+	<div id="dir">
+	<div class="club_dir">
+		<div class="club_img"><img src="img/club_img.png" /></div>
+		<div class="club_info">
+			<div class="club_name">myhobbyhive car club</div>
+			<div class="club_add">Myhobbyhive Limited</div>
+			<div class="club_add">40 Gracechurch Street London Ec3v 0bt</div>
+		</div>
+	</div>
+	</div>
+	<div class="white_space"></div>
+	<footer>
+		<div class="links">
+			<a href="social_wall.html"><div class="social_wall">Social Wall</div></a>
+			<a href="profile.html"><div class="profile selected">Profile</div></a>
+			<a href="messages.html"><div class="messages">Messages</div></a>
+			<a href="diary.html"><div class="diary">Diary</div></a>
+			<a href="join_club.html"><div class="hobby_link">Club Stuff</div></a>
+		</div>
+	</footer>
+		<script>
+			$(document).ready(function(){				
+			$('body').append("<div class='loading'></div>");
+			var id = localStorage.getItem("hobby_userID");
+			sendData = {'id':id};
+			$.ajax({
+				type: "POST",
+				url: "http://www.mhhdev.com/mobileapp/newdb/find_friends.php",
+				data: sendData,
+				dataType: "json",
+				success: function(data) {
+						//console.log(data["here"]);
+					if(data['hobby_country'] == 1){
+						var hobby = [];
+						var country = [];
+						for (var i in data['clubtypeID']){
+							var option_hobby = "<option value="+data['clubtypeID'][i]+" ";
+							if(data['clubtypeID'][i] == data['hobby']){
+								option_hobby += " selected";
+							}
+							option_hobby += ">"+data['hobbyname'][i]+"</option>";
+							hobby.push(option_hobby);
+						}
+						for (var i in data['countryID']){
+							var option_country = "<option value="+data['countryID'][i]+" ";
+							if(data['countryID'][i] == data['country']){
+								option_country += "selected";
+							}
+							option_country += ">"+data['countryname'][i]+"</option>"
+							country.push(option_country);
+						}
+						$("#hobby").html(hobby.join(''));
+						$("#country").html(country.join(''));
+						$('#hobby').selectlist({});
+						$('#country').selectlist({});
+						for (var i in data['clubtypeID']){
+							$("#hobby li[data-value='"+data['clubtypeID'][i]+"']").css('background-image', 'url(https://www.myhobbyhive.com/images/hobbyimages/' +data['imagename'][i]+ ')');
+						}
+						for (var i in data['countryID']){
+							$("#country li[data-value='"+data['countryID'][i]+"']").css('background-image', 'url(https://www.myhobbyhive.com/Images/countryflag/' +data['flag'][i]+ ')');
+						}
+						$("#hobby input[type=button]").css(
+							'background-image',
+							$("#hobby li[data-value="+$("input[name=hobby]").val()+"]").css('background-image')
+						);
+						$("#country input[type=button]").css(
+							'background-image',
+							$("#country li[data-value="+$("input[name=country]").val()+"]").css('background-image')
+						);
+					}
+					if(data['success'] == 1){
+						var dir = [];
+						for (var i in data['fname']){
+								if((data['fname'][i] == null)||(data['fname'][i] == 'undefined')){
+									data['fname'][i] = "";
+								}
+								if((data['aboutme'][i] == null)||(data['aboutme'][i] == 'undefined')){
+									data['aboutme'][i] = "";
+								}
+						var divs = "	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['image'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['fname'][i]+"</div><div class='club_add'>"+data['aboutme'][i]+"</div>		</div>";
+						if(data['isfrnd'][i] == "0"){
+						divs +=	"<div class='post right friend_req' data-id='"+data['clubuserID'][i]+"'>Send Friend Request</div>	</div>";
+						}else{
+						divs +="</div>";
+						}
+						dir.push(divs);
+						//alert("nythfhfgh");
+						}			
+						$("#dir").html(dir.join(''));
+						$('.loading').remove();					
+					}else{
+						$("#dir").html("<div class='empty'>"+data["message"]+"</div>");
+						$('.loading').remove();					
+					}
+				},
+				error: function(data, textStatus, errorThrown) { 
+					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+                } 
+				});
+
+
+				$("#find_friend").on('submit',function(e){
+					e.preventDefault();
+					$('body').append("<div class='loading'></div>");
+					var formData =  {"id":id, "hobby":$("input[name=hobby]").val(), "country":$("input[name=country]").val(),  "find":$("input[name=find]").val()}//new FormData(this);
+					//formData.append('id',id);
+					console.log(formData);
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/find_friends.php",
+						data: formData,
+						dataType: "json",
+						//contentType: false,
+						//cache: false,
+						//processData:false,
+						success: function(data) {
+						//console.log(data["here"]);
+							if(data['success'] == 1){
+								var dir = [];
+								for (var i in data['fname']){
+										if((data['fname'][i] == null)||(data['fname'][i] == 'undefined')){
+											data['fname'][i] = "";
+										}
+										if((data['aboutme'][i] == null)||(data['aboutme'][i] == 'undefined')){
+											data['aboutme'][i] = "";
+										}
+								var divs = "	<div class='club_dir'><div class='club_img'><img src='https://www.myhobbyhive.com/clublogos/logo/"+data['image'][i]+"' /></div><div class='club_info'>			<div class='club_name'>"+data['fname'][i]+"</div><div class='club_add'>"+data['aboutme'][i]+"</div>		</div>";
+								if(data['isfrnd'][i] == "0"){
+								divs +=	"<div class='post right friend_req' data-id='"+data['clubuserID'][i]+"'>Send Friend Request</div>	</div>";
+								}else{
+								divs +="</div>";
+								}
+								dir.push(divs);
+								//alert("nythfhfgh");
+								}			
+								$("#dir").html(dir.join(''));
+								$('.loading').remove();					
+							}else{
+								$("#dir").html("<div class='empty'>"+data["message"]+"</div>");
+								$('.loading').remove();					
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							$('body').append("<div class='connection_error'>Unable to connect to internet</div>");						} 
+					});
+				});
+				$(document).on('click','.friend_req',function(e){
+					var friend_id = $(this).data('id');
+					$('body').append("<div class='loading'></div>");
+					var sendData = {"friend_id":friend_id, "id":id};
+					$.ajax({
+						type: "POST",
+						url: "http://www.mhhdev.com/mobileapp/newdb/send_frnd_request.php",
+						data: sendData,
+						dataType: "json",
+						//contentType: false,
+						//cache: false,
+						//processData:false,
+						success: function(data) {
+							if(data['success'] == 1){
+								$(".join_club[data-id='"+data['friend_id']+"']").html("Request Sent");
+								$(".loading").remove();
+							}else{
+								$("#error").html(data['message']);
+								$(".loading").remove();
+							}
+						},
+						error: function(data, textStatus, errorThrown) { 
+							//alert(textStatus+", error:"+errorThrown);
+							$('#error').append("Unable to connect to internet");	
+							$(".loading").remove();
+						} 
+					});
+					
+				});
+
+			});
+		</script>	
+</body>
+</html>		

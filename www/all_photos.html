@@ -41,18 +41,8 @@
 		</div>
 	</div>
 	<div class="profile_trophies">
-		<div class="title">My Friends<a href="all_friends.html"><span>view all</span></a><a href="find_friend.html"><span>Find Friends</span></a></div>
-		<div class="trophy" id="friends">
-		</div>
-	</div>
-	<div class="profile_trophies">
-		<div class="title">My Photos<a href="all_photos.html"><span>view all</span></a></div>
+		<div class="title">My Photos</div>
 		<div class="trophy" id="trophy">
-		</div>
-	</div>
-	<div class="profile_trophies">
-		<div class="title">My Kit</a></div>
-		<div class="trophy" id="kit">
 		</div>
 	</div>
 	<div class="white_space"></div>
@@ -72,9 +62,10 @@
 		<script>
 			$(document).ready(function(){		
 			if (!(localStorage.getItem("friendo_id") === null)){
-			localStorage.removeItem("friendo_id");
+				var id = localStorage.getItem("friendo_id");				
+			}else{
+				var id = localStorage.getItem("hobby_userID");
 			}
-			var id = localStorage.getItem("hobby_userID");
 			var sendData = { "id": id};
 			$('body').append("<div class='loading'></div>");
 			$.ajax({
@@ -104,28 +95,6 @@
 							}
 							$("#trophy").html(awards.join(''));							
 						}
-						if(data['kits']==0){
-							$("#kit").html("<div class='empty'>No Kit</div>");
-						}else{
-							var kits = [];
-							for(i=0;(i<10) && (i<data['kit'].length);i++){
-								kits.push("<img src='https://www.myhobbyhive.com/Images/assets/list/"+data['kit'][i]+"?width=54&height=54&mode=crop' />");
-							}
-							$("#kit").html(kits.join(''));							
-						}
-						if(data['friends']==0){
-							$("#friends").html("<div class='empty'>No Friends Yet</div>");
-						}else{
-							var friends = [];
-							for(i=0;(i<10) && (i<data['friend_img'].length);i++){
-								if((data['friend_img'][i] == null)|| (data['friend_img'][i] == "")){
-								friends.push("<img class='friend_profile' data-id='"+data['friend_id'][i]+"' src='https://www.myhobbyhive.com/clubuserimages/profile/noimage.png' />");
-								}else{
-								friends.push("<img class='friend_profile' data-id='"+data['friend_id'][i]+"' src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['friend_img'][i]+"' />");
-								}
-							}
-							$("#friends").html(friends.join(''));							
-						}
 						$('.loading').remove();
 					}
 					
@@ -133,15 +102,6 @@
 				error: function(data, textStatus, errorThrown) { 
 					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
                 } 
-				});
-				$(document).on('click','.friend_profile',function(e){
-					e.preventDefault();
-					if (!(localStorage.getItem("messagePK") === null)){
-					localStorage.removeItem("messagePK");
-					}
-					localStorage.setItem("friendo_id",$(this).data('id'));
-					window.location = 'friends_profile.html';
-					//alert($(this).data('id'));
 				});
 			});
 		</script>

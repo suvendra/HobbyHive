@@ -655,8 +655,9 @@ input[type="email"], input[type="password"] {
 }
 .trophy img {
   width: 18%;
-  margin: 0% 1%;
+  margin: 1%;
   border-radius: 10px;
+  cursor:pointer;
 }
 .title span {
   float: right;

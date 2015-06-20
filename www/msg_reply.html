@@ -42,7 +42,7 @@
 	</div>
 	<div class="msg_history">
 		<div class="title">Message History</div>
-		<div id="all_msg">
+		<div id="all_msg" data-value="383" >
 		<div class="msg_short">
 			<ul class="msg_list">
 				<li class="">
@@ -154,8 +154,14 @@
 		<script>
 			$(document).ready(function(){		
 			var id = localStorage.getItem("hobby_userID");
+			if (!(localStorage.getItem("messagePK") === null)){
 			var msg_id = localStorage.getItem("messagePK");
 			var sendData = { "id": id, "msg_id": msg_id};
+			}else{
+			var friendo_id = localStorage.getItem("friendo_id");
+			var sendData = { "id": id, "friendo_id":friendo_id};
+			console.log(friendo_id);
+			}
 			$('body').append("<div class='loading'></div>");
 			$.ajax({
 				type: "POST",
@@ -172,9 +178,11 @@
 							$("#all_msg").data('value',data['senderID']);
 						$('.loading').remove();
 					}else {
+						$("#all_msg").data('value',data['senderID']);
 						$('#all_msg').html("<div class='empty'>No recieved Messages</div>");
 						$('.loading').remove();						
 					}
+							//alert(data['senderID']);
 					
 				},
 				error: function(data, textStatus, errorThrown) { 
