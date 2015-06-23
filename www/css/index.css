@@ -575,6 +575,7 @@ input[type="email"], input[type="password"] {
   padding: 5px 0px 0px 20px;
   margin-left: 20px;
   background: url(../img/reply.png) center left no-repeat;
+  cursor:pointer;
 }
 .mark_read {
   float: right;
@@ -943,4 +944,7 @@ input[type="email"], input[type="password"] {
 .error {
   color: red;
   margin-left: 10px;
+}
+.reply_div {
+  overflow: hidden;
 }

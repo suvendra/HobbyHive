@@ -64,7 +64,13 @@
 							if(data['isread'][i] == 0){
 								var isread = 'unread';
 							}else { var isread = ''; }
-							messages.push("<li class='"+isread+"' data-value="+data['messagePK'][i]+"><div class='msgr_img'><img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image'][i]+"'/></div><div class='msg_body'>				<div class='msg_date'>"+data['date'][i]+"</div>				<div class='msg_author'>From: "+data['sendername'][i]+"</div>				<div class='msg_text'>"+data['messagebody'][i].substring(0,50)+"...</div>				<a href='message.html'><div class='more'></div></a>			</div>		</li>");
+							var messages_array = "<li class='"+isread+"' data-value="+data['messagePK'][i]+"><div class='msgr_img'><img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image'][i]+"'/></div><div class='msg_body'>				<div class='msg_date'>"+data['date'][i]+"</div>				<div class='msg_author'>From: "+data['sendername'][i]+"</div>				<div class='msg_text'>"+data['messagebody'][i].substring(0,50)+"...</div>";
+							if(data['senderID'][i] != '0'){
+							messages_array += "<div class='reply_div'><div class='post right'>Reply</div></div>			</div>		</li>";
+							}else{
+								messages_array += "</div>		</li>";
+							}
+							messages.push(messages_array);
 						}
 							$("#msg_list").html(messages.join(''));							
 						$('.loading').remove();
@@ -77,6 +83,13 @@
 				error: function(data, textStatus, errorThrown) { 
 					$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
                 } 
+				});
+				$("#msg_list").on("click", ".post", function(e) {
+					e.stopPropagation();
+					e.preventDefault();
+//					console.log($(this).parents('li').data('value'));
+					localStorage.setItem("messagePK", $(this).parents('li').data('value'));
+					window.location = 'msg_reply.html';
 				});
 				$("#msg_list").on("click", "li", function() {
 					localStorage.setItem("messagePK", $(this).data('value'));

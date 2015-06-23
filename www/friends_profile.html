@@ -44,7 +44,7 @@
 		</div>
 	</div>
 	<div class="profile_trophies">
-		<div class="title">My Photos<a href="all_frndphotos.html"><span>view all</span></a></div>
+		<div class="title">My Photos<a href="all_frndphotos.html"><span>View all</span></a></div>
 		<div class="trophy" id="trophy">
 		</div>
 	</div>
@@ -89,7 +89,7 @@
 						}
 						$("#profile_pic").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
 						if(data['awards']==0){
-							$("#trophy").html("<div class='empty'>No Awards Yet</div>");
+							$("#trophy").html("<div class='empty'>No Photos</div>");
 						}else{
 							var awards = [];
 							for(var i in data['award']){

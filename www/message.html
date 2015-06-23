@@ -77,7 +77,13 @@
 							$("#msg_date").html(data['date']);							
 							$("#msg_by").html("From: "+data['sendername']);							
 							$("#msg").html(data['messagebody']);							
-							$("#msg_single").data('value',data['messagePK']);							
+							$("#msg_single").data('value',data['messagePK']);
+							if(data['senderID'] == '0'){
+								$("#reply").remove();
+							}
+							if(data['isread'] == '1'){
+								$('#mark_read').remove();
+							}
 							$('.loading').remove();
 					}else {
 						$('#msg_list').html('No recieved Messages');
@@ -94,6 +100,61 @@
 				e.preventDefault();
 				localStorage.setItem("messagePK",$("#msg_single").data('value'));
 				window.location = "msg_reply.html";
+			});
+			$("#delete").click(function(e){
+				e.preventDefault();
+				var messagePK = $("#msg_single").data('value');
+				var sendData = { "messagePK":messagePK};
+				$.ajax({
+					type: "POST",
+					url: "http://www.mhhdev.com/mobileapp/newdb/delete_msg.php",
+					data: sendData,
+					dataType: "json",
+					success: function(data) {
+						if(data['success'] == 1){
+								window.location = "messages.html";
+								$('.loading').remove();
+						}else {
+							$('#msg').prepend('<div class="error"> Some error occured, Try again</div>');
+							$('.loading').remove();						
+						}
+						
+					},
+					error: function(data, textStatus, errorThrown) { 
+						$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+					} 
+				});
+			});
+			$("#mark_read").click(function(e){
+				e.preventDefault();
+				var messagePK = $("#msg_single").data('value');
+				var sendData = { "messagePK":messagePK};
+				$.ajax({
+					type: "POST",
+					url: "http://www.mhhdev.com/mobileapp/newdb/mark_read.php",
+					data: sendData,
+					dataType: "json",
+					success: function(data) {
+						if(data['success'] == 1){
+								window.location = "messages.html";
+								$('.loading').remove();
+						}else {
+							$('#msg').prepend('<div class="error"> Some error occured, Try again</div>');
+							$('.loading').remove();						
+						}
+					},
+					error: function(data, textStatus, errorThrown) { 
+						$('body').append("<div class='connection_error'>Unable to connect to internet</div>");
+					} 
+				});
+			});
+			$(document).on('click','#lnkaccount',function(e){
+				e.preventDefault();
+				var newLink = $(this).attr('href');
+				newLink = newLink.replace("../",'/');
+				newLink = "https://www.myhobbyhive.com"+newLink;
+				//navigator.app.loadUrl(newLink, { openExternal:true });
+				console.log(newLink);
 			});
 			});
 		</script>

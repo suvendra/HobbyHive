@@ -41,12 +41,12 @@
 		</div>
 	</div>
 	<div class="profile_trophies">
-		<div class="title">My Friends<a href="all_friends.html"><span>view all</span></a><a href="find_friend.html"><span>Find Friends</span></a></div>
+		<div class="title">My Friends<a href="all_friends.html"><span>View all</span></a><a href="find_friend.html"><span>Find Friends</span></a></div>
 		<div class="trophy" id="friends">
 		</div>
 	</div>
 	<div class="profile_trophies">
-		<div class="title">My Photos<a href="all_photos.html"><span>view all</span></a></div>
+		<div class="title">My Photos<a href="all_photos.html"><span>View all</span></a></div>
 		<div class="trophy" id="trophy">
 		</div>
 	</div>
@@ -96,7 +96,7 @@
 						}
 						$("#profile_pic").html("<img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['image']+"' />");
 						if(data['awards']==0){
-							$("#trophy").html("<div class='empty'>No Awards Yet</div>");
+							$("#trophy").html("<div class='empty'>No Photos</div>");
 						}else{
 							var awards = [];
 							for(i=0;(i<10) && (i<data['award'].length);i++){ //var i in data['award']){
