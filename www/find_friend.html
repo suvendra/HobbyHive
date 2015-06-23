@@ -119,7 +119,7 @@
 							$("#country li[data-value="+$("input[name=country]").val()+"]").css('background-image')
 						);
 					}
-					if((data['success'] == 1) && (data['counter'] != 0)){
+					if(data['success'] == 1){
 						var dir = [];
 						for (var i in data['fname']){
 								if((data['fname'][i] == null)||(data['fname'][i] == 'undefined')){
@@ -140,7 +140,7 @@
 						$("#dir").html(dir.join(''));
 						$('.loading').remove();					
 					}else{
-						$("#dir").html("<div class='empty'>No User found with Same Hobby in your country</div>");
+						$("#dir").html("<div class='empty'>"+data["message"]+"</div>");
 						$('.loading').remove();					
 					}
 				},
@@ -155,7 +155,7 @@
 					$('body').append("<div class='loading'></div>");
 					var formData =  {"id":id, "hobby":$("input[name=hobby]").val(), "country":$("input[name=country]").val(),  "find":$("input[name=find]").val()}//new FormData(this);
 					//formData.append('id',id);
-//					console.log(formData);
+					console.log(formData);
 					$.ajax({
 						type: "POST",
 						url: "http://www.mhhdev.com/mobileapp/newdb/find_friends.php",
@@ -166,8 +166,7 @@
 						//processData:false,
 						success: function(data) {
 						//console.log(data["here"]);
-							if((data['success'] == 1) && (data['counter'] != 0)){
-								console.log(data['counter']);
+							if(data['success'] == 1){
 								var dir = [];
 								for (var i in data['fname']){
 										if((data['fname'][i] == null)||(data['fname'][i] == 'undefined')){
@@ -188,7 +187,7 @@
 								$("#dir").html(dir.join(''));
 								$('.loading').remove();					
 							}else{
-								$("#dir").html("<div class='empty'>No User found with Same Hobby in your country</div>");
+								$("#dir").html("<div class='empty'>"+data["message"]+"</div>");
 								$('.loading').remove();					
 							}
 						},
