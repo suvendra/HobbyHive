@@ -948,3 +948,82 @@ input[type="email"], input[type="password"] {
 .reply_div {
   overflow: hidden;
 }
+#image_upload {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 80%;
+  height: 100%;
+  margin-top: 0px;
+  padding: 0% 10%;
+  padding-top: 60px;
+  display:none;
+}
+.overlay {
+  width: 100%;
+  height: 320px;
+  background-color: white;
+  border-radius: 10px;
+  position: relative;
+}
+.head {
+  border-radius: 10px 10px 0px 0px;
+  overflow: hidden;
+}
+.upload_place {
+  background-color: #ffa200;
+  color: black;
+  font-size: 16px;
+  font-family: "Roboto-Medium";
+  padding: 1%;
+  width: 48%;
+  float: left;
+  text-align: center;
+  padding-top: 10px;
+}
+.inside {
+  background-color: white;
+}
+.img_upload_btn {
+  text-align: center;
+  width: 240px;
+  margin: auto;
+  margin-top: 10px;
+}
+.img_upload_btn2 {
+  width: 70%;
+  min-width: 240px;
+  margin: auto;
+  margin-top: 10px;
+  max-height: 160px;
+  overflow-y: scroll;
+  text-align: center;
+}
+.img_upload_btn input {
+  margin-top: 10px;
+}
+.submit_img {
+  text-align: center;
+  padding: 10px 10px;
+  background-color: #ffa200;
+  width: 100px;
+  border-radius: 5px;
+  color: white;
+  font-family: "Roboto-Medium";
+  margin: 15px auto;
+}
+#cancel {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0px;
+  background-color: #ffa200;
+  border-radius: 0px 0px 10px 10px;
+  font-family: "Roboto-Medium";
+}
+.img_upload_btn img {
+  max-height: 140px;
+}

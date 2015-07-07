@@ -6,11 +6,13 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/image-picker.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
 	<script src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/image-picker.min.js"></script>
     <title>My Hobby Hive</title>
 </head>
 <body>
@@ -32,12 +34,29 @@
 	</div>
 	<div class="content">
 		<div class="wall_title">WRITE STATUS</div>
-	<form id="status" name="status" method="POST" action="">
+	<form id="status" name="status" method="POST" action="" enctype="multipart/form-data">
 		<div id="error"></div>
 		<div class="write_wall"><textarea class="status" name="text_status" placeholder="Write on hobby wall?" rows="5"></textarea></div>
 		<div class="form_submit">
 			<div class="upload">
 				<div id="photo"><img src="img/picture.png" /></div>
+				<div class="image_upload" id="image_upload">
+					<div class="overlay">
+						<div class="head">
+							<div class="upload_place inside" id="from_computer">From Hard Drive</div>
+							<div class="upload_place" id="your_img">Your Images</div>
+						</div>
+						<div class="img_upload_btn" id="hdd">
+							<img src="https://www.myhobbyhive.com/clublogos/logo/noimage.png" id="img_preveiw">
+							<input type="file"  name="imagefilename" accept="image/x-png, image/gif, image/jpeg"/>
+						</div>
+						<div class="img_upload_btn2" id="your_pic">
+							
+						</div>
+						<div class="submit_img" id="submit_img">SUBMIT</div> 
+						<div id="cancel">Cancel</div>
+					</div>
+				</div>
 				<div id="video"><img src="img/video.png" /></div>
 			</div>
 			<div class="post submit"><input type="submit" name="submit" value="POST"></div>
@@ -81,11 +100,21 @@
 					if(data['success'] == 1){
 						var post = [];
 						for (var i in data['postID']){
-							if((data['postimage'][i] == "")||(data['postimage'][i] == null)){
+							var img = "";
+							if(data['post_img_count'][i] == 1){
+								for(var j in data[data['postID'][i]]['post_img_type']){
+									if(data[data['postID'][i]]['post_img_type'][j] == "hdd"){
+										img += "<img src='http://www.mhhdev.com/mobileapp/newdb/profile/"+data[data['postID'][i]]['post_img'][j]+"' >"
+									}else{
+										img +="<img src='https://www.myhobbyhive.com/Images/users/album/full/"+data[data['postID'][i]]['post_img'][j]+"' >"
+									}
+								}
+							}
+							/*if((data['postimage'][i] == "")||(data['postimage'][i] == null)){
 								var img = '';
 							}else { 
 								var img = "<img src='img/"+data['postimage'][i]+"' />";
-							}
+							}*/
 							if(data['f_image'][data['postedby'][i]] == ""){
 								data['f_image'][data['postedby'][i]] = "noimage.png";
 							}							
@@ -97,7 +126,22 @@
 							}							
 							post.push("		<div class='posts' data-value="+data['postID'][i]+">		<div class='post_content'>				<div class='profile_img'><img src='https://www.myhobbyhive.com/clubuserimages/profile/"+data['f_image'][data['postedby'][i]]+"' /></div>				<div class='post_text'>					<div class='author'>From : "+data['f_fname'][data['postedby'][i]]+" "+data['f_lname'][data['postedby'][i]]+"</div>					<div class='status_text'>"+data['text'][i]+"</div>					<div class='post_img'>"+img+"</div>				</div>			</div>			<div class='post_social'>				<div class='comment_share'>					<div class='comment' data-value="+data['postID'][i]+">Comment</div>					<div class='share' data-value="+data['postID'][i]+">Share</div>				</div>				<div class='post_stats'>					<a href='social_comment.html'><div class='comment_count'>"+data['comment'][i]+"</div></a>					<div class='share_count'>"+data['like'][i]+"</div>					<div class='delete'><img src='img/delete.png' /></div>				</div>			</div>		</div>");
 						}
-							$("#post_container").html(post.join(''));							
+							$("#post_container").html(post.join(''));	
+							
+							if(data['no_image'] == 1){
+								var imgs = [];
+								imgs.push("<select class='image-picker show-html' name='image_picker' id='img_picker'><option value=''></option>")
+								for(var i in data['imagepath']){
+									if((data['imagepath'][i] != "")||(data['imagepath'][i] != null)){
+										imgs.push("</option><option data-img-src='https://www.myhobbyhive.com/Images/users/album/full/"+data['imagepath'][i]+"?width=54&height=54&mode=crop' value='"+data['userimageID'][i]+"'></option>");
+									}
+								}
+								imgs.push("<select>");
+								$("#your_pic").html(imgs.join(''));
+								$("#img_picker").imagepicker()
+							}else{
+								$("#your_pic").html("<div class='empty'>No Images</div>");								
+							}
 						$('.loading').remove();
 					}else {
 						$('#post_container').html(data['message']);
@@ -130,9 +174,11 @@
 						processData:false,
 						success: function(data) {
 							if(data["success"]==1){
+								//alert(data['prev_id']);
 								location.reload();
 								$('.loading').remove();					
 							} else {
+								//alert(data['image']+" , "+data['img_name']+" , "+data['sourcePath']+" , "+data['targetPath']+" , "+data['img_data']);
 								$('#error').html(data["message"]);
 								$('.loading').remove();					
 							}
@@ -142,6 +188,65 @@
 						} 
 					});
 				});
+				
+				$("#photo").on('click',function(e){
+					e.preventDefault();
+					$("#image_upload").fadeIn();
+					$("#hdd").show();
+					$("#your_pic").hide();
+				});
+				$("#submit_img").on('click',function(e){
+					e.preventDefault();
+					$("#image_upload").fadeOut();
+				});
+				$("#cancel").on('click',function(e){
+					e.preventDefault();
+					$("#image_upload").fadeOut();
+					$("#img_picker").val("");
+					$("input[name=imagefilename]").val("")
+					$(".thumbnail.selected").removeClass("selected");
+					$('#img_preveiw').attr('src','https://www.myhobbyhive.com/clublogos/logo/noimage.png');
+					$(".inside").removeClass("inside");
+					$("#from_computer").addClass("inside");
+				});
+				$("#your_img").on('click',function(e){
+					e.preventDefault();
+					$("#your_pic").show();
+					$("#hdd").hide();
+					$(".inside").removeClass("inside");
+					$(this).addClass("inside");
+					$("input[name=imagefilename]").val("");
+					$('#img_preveiw').attr('src','https://www.myhobbyhive.com/clublogos/logo/noimage.png');
+				});
+				$("#from_computer").on('click',function(e){
+					e.preventDefault();
+					$("#hdd").show();
+					$("#your_pic").hide();
+					$(".inside").removeClass("inside");
+					$(this).addClass("inside");
+					$("#img_picker").val("");
+					$(".thumbnail.selected").removeClass("selected");
+				});
+				$("input[name=imagefilename]").change(function() {
+				var file = this.files[0];
+				var imagefile = file.type;
+				var match= ["image/jpeg","image/png","image/jpg"];
+				if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2])))
+				{
+				//$('#img_preveiw').attr('src','noimage.png');
+				return false;
+				}
+				else
+				{
+				var reader = new FileReader();
+				reader.onload = imageIsLoaded;
+				reader.readAsDataURL(this.files[0]);
+				}
+				});
+				function imageIsLoaded(e) {
+				$(".upload_img").css("color","green");
+				$('#img_preveiw').attr('src', e.target.result);
+				};
 				
 			});
 		</script>
