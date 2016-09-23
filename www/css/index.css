@@ -1027,3 +1027,122 @@ input[type="email"], input[type="password"] {
 .img_upload_btn img {
   max-height: 140px;
 }
+.account_type {
+    padding: 5px;
+    margin: 10px 20px;
+    border: 2px solid #ffaf18;
+    font-size: 14px;
+    font-weight: bold;
+}
+.account_list {
+    margin: 0px 20px;
+}
+.list_item {
+    background: #eee;
+}
+.account_class {
+    float: left;
+    padding: 8px;
+    font-weight: bold;
+    width: 50%;
+}
+.upgrade {
+    float: right;
+    background: #ffa200;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    margin: 5px;
+    color: white;
+    cursor: pointer;
+}
+.list_head {
+    overflow: hidden;
+    background: linear-gradient(#eaeaea,#ffffff);
+}
+.listings {
+    padding: 8px;
+}
+.club_con {
+    width: auto;
+    margin: 10px 15px;
+    background: white;
+    border: 1px solid #ddd;
+}
+.club_con .title {
+    text-align: center;
+    padding: 10px;
+    background: #ffb01b;
+    color: white;
+    font-weight: bold;
+}
+.club_title {
+    background: linear-gradient(#eaeaea,#ffffff);
+    padding: 10px;
+  overflow: hidden;
+}
+.buy {
+    float: right;
+    background: #ffb01b;
+    padding: 5px 10px;
+    color: white;
+    font-weight: bold;
+}
+.club_name {
+    float: left;
+}
+.club_tools {
+    border-top: 1px solid #ddd;
+    padding: 0px 10px;
+}
+.tool_type {
+    padding: 10px 0px;
+    position: relative;
+    cursor: pointer;
+}
+.tool_type:after {
+    content: "";
+    border: 10px solid transparent;
+    border-top-color: #ffb01b;
+    position: absolute;
+    top: 15px;
+    margin-left: 10px;
+}
+.tool_des {
+    display: none;
+}
+.cart_detail {
+    padding: 0px 15px;
+    font-weight: bold;
+}
+.cart_item {
+    padding: 10px 0px;
+    border-bottom: 1px solid #ddd;
+}
+.item_price {
+    float: right;
+}
+.gt {
+    color: white;
+    background: #ffb01b;
+    padding: 0px 15px;
+    font-weight: bold;
+}
+.chk_paypal {
+    margin: 15px;
+    padding: 5px 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #ffb01b;
+    color: white;
+}
+.chk_paypal img {
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+.declaration {
+    margin: 15px;
+    padding: 0px 15px;
+    font-size: 12px;
+}
